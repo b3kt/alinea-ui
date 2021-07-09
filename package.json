@@ -10,6 +10,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@baloise/vue-axios": "^1.0.0",
     "@baloise/vue-keycloak": "^1.5.0",
     "@quasar/extras": "^1.10.8",
     "axios": "^0.21.1",
@@ -20,10 +21,12 @@
     "js-sha256": "^0.9.0",
     "jwt-decode": "^3.1.2",
     "keycloak-js": "^12.0.4",
+    "localforage": "^1.9.0",
     "moment-timezone": "^0.5.33",
     "quasar": "^2.0.2",
     "secure-web-storage": "^1.0.2",
     "uuid": "8.1.0",
+    "vlf": "^1.1.0",
     "vue": "3.1.2",
     "vue-i18n": "^9.0.0-beta.0",
     "vue-moment": "^4.1.0",

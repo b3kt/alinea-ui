@@ -21,7 +21,7 @@ const routes = [
         component: () => import("pages/Books.vue"),
       },
       {
-        meta: { requiresAuth: false },
+        meta: { requiresAuth: true },
         path: "login",
         component: () => import("pages/Login.vue"),
       },

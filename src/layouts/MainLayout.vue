@@ -2,7 +2,15 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+        <q-btn
+          v-if="isAuthenticated"
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
         <q-toolbar-title>
           <q-btn flat to="/">
             {{ config.appName }}
@@ -30,13 +38,17 @@
         </div>
         <q-space />
         <!-- <div>Quasar v{{ $q.version }}</div> -->
-        <q-btn outline>
-          {{$t('login')}}
-        </q-btn>
+        <LoginDialog />
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-1">
+    <q-drawer
+      v-if="isAuthenticated"
+      v-model="leftDrawerOpen"
+      show-if-above
+      bordered
+      class="bg-grey-1"
+    >
       <q-list>
         <q-item-label header class="text-grey-8"> Essential Links </q-item-label>
         <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
@@ -46,11 +58,15 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- <q-btn label="Card" color="primary" @click="card = true" /> -->
+    
   </q-layout>
 </template>
 
 <script>
 import EssentialLink from "components/EssentialLink.vue";
+import LoginDialog from "components/LoginDialog";
 
 const linksList = [
   {
@@ -101,9 +117,9 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "MainLayout",
-
   components: {
     EssentialLink,
+    LoginDialog,
   },
 
   setup() {

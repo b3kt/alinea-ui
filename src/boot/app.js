@@ -2,8 +2,26 @@ import { boot } from "quasar/wrappers";
 import CryptoJS from "crypto-js";
 import SecureStorage from "secure-web-storage";
 import { sha256 } from "js-sha256";
+import localforage from "localforage";
+
+import { useKeycloak } from "@baloise/vue-keycloak";
 
 export default boot(async ({ app, router }) => {
+  localforage.config({
+    driver: localforage.INDEXEDDB, // Force WebSQL; same as using setDriver()
+    name: "alineaApp",
+    version: 1.0,
+    // size: 4980736, // Size of database, in bytes. WebSQL-only for now.
+    storeName: "datastore", // Should be alphanumeric, with underscores.
+    description: "some description",
+  });
+  app.config.globalProperties.$feeds = localforage.createInstance({
+    name: "feeds",
+  });
+  app.config.globalProperties.$options = localforage.createInstance({
+    name: "options",
+  });
+
   // SECURE LOCALSTORAGE UTILS
   const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
   const secureStorage = new SecureStorage(localStorage, {
@@ -24,6 +42,19 @@ export default boot(async ({ app, router }) => {
   });
   app.config.globalProperties.$secureStorage = secureStorage;
 
+  const {
+    isAuthenticated,
+    isPending,
+    hasFailed,
+    token,
+    decodedToken,
+    username,
+    roles,
+    keycloak,
+
+    // Functions
+    hasRoles,
+  } = useKeycloak();
 
   //MIXIN
   const mixins = {
@@ -45,8 +76,11 @@ export default boot(async ({ app, router }) => {
     },
     computed: {
       isAuthenticated() {
-        return app.config.globalProperties.$keycloak.isAuthenticated;
+        return isAuthenticated.value;
       },
+      wow(){
+        return "AAAAAAAAAAAAAAAAA";
+      }
       // isAuthorMode() {
       //   const mode = this.$secureStorage.getItem("currentMode");
       //   return mode === "author";
@@ -71,5 +105,6 @@ export default boot(async ({ app, router }) => {
       // },
     },
   };
+
   app.mixin(mixins);
 });
