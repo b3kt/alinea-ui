@@ -1,6 +1,6 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import routes from './routes'
+import routes from './public-routes'
 
 // import userRoutes from "./user-routes";
 // import authorRoutes from "./author-routes";
@@ -15,12 +15,6 @@ import routes from './routes'
  * with the Router instance.
  */
 
-// const isAuthorMode = Vue.prototype.$secureStorage.getItem("currentMode") === "author";
-// const isAuthenticated = Vue.prototype.$secureStorage.getItem("userInfo") !== null;
-
-// const tmpRoutes = isAuthorMode ? import("./author-routes") : import("./user-routes");
-// const routes = isAuthenticated ? tmpRoutes : import("./public-routes");
-
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -29,7 +23,6 @@ export default route(function (/* { store, ssrContext } */) {
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
-
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath

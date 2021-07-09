@@ -1,8 +1,5 @@
 {
-  "@sowell/rxdb": {
-    "server_graphql_base_url": "https://unique-cobra-69.hasura.app/v1/graphql",
-    "server_graphql_base_url_subscription": "wss://unique-cobra-69.hasura.app",
-    "vuex_getters_token": "rxdb/getToken",
-    "vuex_getters_db_name": "rxdb/getDbName"
+  "@quasar/apollo": {
+    "typescript": false
   }
 }
