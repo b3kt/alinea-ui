@@ -3,8 +3,27 @@ import CryptoJS from "crypto-js";
 import SecureStorage from "secure-web-storage";
 import { sha256 } from "js-sha256";
 import localforage from "localforage";
+import { mapGetters } from "vuex";
 
 import { useKeycloak } from "@baloise/vue-keycloak";
+
+const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
+const secureStorage = new SecureStorage(localStorage, {
+  hash: function hash(key) {
+    key = CryptoJS.SHA256(key, SECRET_KEY);
+    return key.toString();
+  },
+  encrypt: function encrypt(data) {
+    data = CryptoJS.AES.encrypt(data, SECRET_KEY);
+    data = data.toString();
+    return data;
+  },
+  decrypt: function decrypt(data) {
+    data = CryptoJS.AES.decrypt(data, SECRET_KEY);
+    data = data.toString(CryptoJS.enc.Utf8);
+    return data;
+  },
+});
 
 export default boot(async ({ app, router }) => {
   localforage.config({
@@ -23,23 +42,6 @@ export default boot(async ({ app, router }) => {
   });
 
   // SECURE LOCALSTORAGE UTILS
-  const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
-  const secureStorage = new SecureStorage(localStorage, {
-    hash: function hash(key) {
-      key = CryptoJS.SHA256(key, SECRET_KEY);
-      return key.toString();
-    },
-    encrypt: function encrypt(data) {
-      data = CryptoJS.AES.encrypt(data, SECRET_KEY);
-      data = data.toString();
-      return data;
-    },
-    decrypt: function decrypt(data) {
-      data = CryptoJS.AES.decrypt(data, SECRET_KEY);
-      data = data.toString(CryptoJS.enc.Utf8);
-      return data;
-    },
-  });
   app.config.globalProperties.$secureStorage = secureStorage;
 
   const {
@@ -76,35 +78,60 @@ export default boot(async ({ app, router }) => {
     },
     computed: {
       isAuthenticated() {
-        return isAuthenticated.value;
+        const session = this.$secureStorage.getItem("session");
+        return session !== undefined && session !== null ? session.isAuthenticated : false;
       },
-      wow(){
-        return "AAAAAAAAAAAAAAAAA";
-      }
-      // isAuthorMode() {
-      //   const mode = this.$secureStorage.getItem("currentMode");
-      //   return mode === "author";
-      // },
-      // userInfo() {
-      //   return this.getUserInfo();
-      // },
-      // userUID() {
-      //   const result = this.getUserInfo();
-      //   return result !== null && result !== undefined ? result.sub : null;
-      // },
-      // isDialogDisplayed() {
-      //   return this.dialogDashboard.displayed;
-      // },
+      getSession() {
+        const session = this.$secureStorage.getItem("session");
+        return session !== undefined && session !== null ? session : {}; 
+      },
+      getLoginUrl() {
+        return this.$keycloak !== undefined ? this.$keycloak.createLoginUrl() : null;
+      },
+      getLogoutUrl() {
+        return this.$keycloak !== undefined ? this.$keycloak.createLogoutUrl() : null;
+      },
+      getRegisterUrl() {
+        return this.$keycloak !== undefined ? this.$keycloak.createRegisterUrl() : null;
+      },
+      getUserUID(){
+        const session = this.$secureStorage.getItem("session");
+        return session !== undefined && session !== null ? session.decodedToken.sub : null; 
+      },
+      getUserGroups(){
+        const session = this.$secureStorage.getItem("session");
+        return session !== undefined && session !== null ? session : null; 
+      },
+      ...mapGetters({
+        dialog: "ui/getLoginDialog",
+        requireLogin: "ui/getRequireLogin",
+      }),
     },
     methods: {
-      // getUserInfo() {
-      //   return JSON.parse(this.$secureStorage.getItem("userInfo"));
-      // },
-      // doLogout() {
-      //   this.$secureStorage.clear();
-      // },
+      initSession() {
+        console.log("--");
+        console.log(keycloak);
+        console.log("--");
+        if(isAuthenticated.value){
+          const obtainedRoles = this.$secureStorage.getItem("session"); 
+          if(obtainedRoles === undefined || obtainedRoles === null){
+            this.$secureStorage.setItem("session", {
+              isAuthenticated: isAuthenticated.value,
+              roles: roles.value,
+              username: username.value,
+              token: token.value,
+              decodedToken: decodedToken.value,
+              // keycloak: keycloak
+            });
+          }
+        }
+      }
+    },
+    created() {
+      this.initSession();
     },
   };
-
   app.mixin(mixins);
 });
+
+export { secureStorage }

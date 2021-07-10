@@ -59,7 +59,7 @@
       <router-view />
     </q-page-container>
 
-    <!-- <q-btn label="Card" color="primary" @click="card = true" /> -->
+    [{{getSession}}]
     
   </q-layout>
 </template>

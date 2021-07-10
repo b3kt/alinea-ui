@@ -23,7 +23,7 @@ export default {
   name: "Error404",
   data() {
     return {
-      count: 3,
+      count: 2,
     };
   },
   mounted() {
@@ -39,6 +39,7 @@ export default {
         this.count--;
       }, 1000);
     } else {
+      this.$store.commit('ui/hideLoginDialog');
       this.$router.push("/");
     }
   }

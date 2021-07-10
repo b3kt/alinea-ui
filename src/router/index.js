@@ -1,6 +1,9 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './public-routes'
+import { mapGetters } from "vuex";
+
+// import storeTmp from '../store'
 
 // import userRoutes from "./user-routes";
 // import authorRoutes from "./author-routes";
@@ -15,7 +18,9 @@ import routes from './public-routes'
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+
+export default route(function ( { store, ssrContext } ) {
+
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
@@ -28,6 +33,8 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
+
+  console.log(store.getters['ui/getKeycloakInstance']);
 
   return Router
 })

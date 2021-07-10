@@ -1,6 +1,22 @@
 import { boot } from "quasar/wrappers";
 import { vueKeycloak } from "@baloise/vue-keycloak";
 
+import { useKeycloak } from '@baloise/vue-keycloak'
+
+const {
+  isAuthenticated,
+  isPending,
+  hasFailed,
+  token,
+  decodedToken,
+  username,
+  roles,
+  keycloak,
+
+  // Functions
+  hasRoles,
+} = useKeycloak()
+
 // keycloak configuration
 const keycloakConfig = {
   initOptions: {
@@ -15,13 +31,34 @@ const keycloakConfig = {
   },
 };
 
+// async function initAsync(app,store) {
+//   if(app !== undefined && store !== undefined){
+//     app.use(vueKeycloak, keycloakConfig);
+//     store.commit("ui/setKeycloakInstance", app.config.globalProperties.$keycloak);
+//   }
+// }
+
+function initSync(app,store) {
+  // if(app !== undefined && store !== undefined){
+  //   (async () => initAsync(app,store))();
+  // }
+  app.use(vueKeycloak, keycloakConfig);
+  store.commit("ui/setKeycloakInstance", app.config.globalProperties.$keycloak);
+}
+
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ app, router, store }) => {
   
+  // set default value
+  // app.config.globalProperties.$keycloak = {
+  //   isAuthenticated: false,
+  //   token: null
+  // }
+
   // to handle session in public routes
   if(app.config.globalProperties.$secureStorage.getItem('isRequireLogin')){
-    app.use(vueKeycloak, keycloakConfig);
+    initSync(app,store);
   }
   
   // check router which is require authentication
@@ -34,7 +71,7 @@ export default boot(async ({ app, router, store }) => {
       ) {
         // store to secured localstorage
         app.config.globalProperties.$secureStorage.setItem('isRequireLogin', true);
-        app.use(vueKeycloak, keycloakConfig);
+        initSync(app,store);
         next();
       } else {
         // this route requires auth, check if logged in
@@ -53,5 +90,3 @@ export default boot(async ({ app, router, store }) => {
     }
   });
 });
-
-export { vueKeycloak, keycloakConfig };

@@ -19,30 +19,9 @@
             <div class="col-12 text-center q-my-sm">
               <q-btn outline>{{ $t("login_with_google") }}</q-btn>
             </div>
-            <!-- <div class="col-12 text-center q-my-sm">
-              {{ $t("forgot_your_password") }}?
-              <a
-                href="https://account.berdaya.in/realms/alinea/login-actions/reset-credentials?client_id=account&tab_id=7fLqa0wrZ7Y"
-              >
-                {{ $t("forgot_password_link") }}
-              </a>
-            </div> -->
-
-            <!-- <div class="col-12 text-center q-my-sm">
-              {{ $t("didnt_have_account") }}?
-              <a :href="getRegisterUrl">
-                {{ $t("register_link") }}
-              </a>
-            </div> -->
           </div>
         </q-card-section>
-
         <q-separator />
-
-        <q-card-actions align="right">
-          <q-btn v-close-popup flat color="primary" label="Reserve" />
-          <q-btn v-close-popup flat color="primary" round icon="event" />
-        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -50,41 +29,28 @@
 
 <script>
 import { ref } from "vue";
-import { mapGetters } from "vuex";
 import { openURL } from "quasar";
 
 export default {
-  // name: 'ComponentName',
+  name: 'LoginDialog',
   setup() {
-    return {
-      instance: null,
-      card: ref(false),
-      tab: ref("mails"),
-    };
+    return {};
   },
   methods: {
     onShowLoginDialog() {
       this.$store.commit("ui/showLoginDialog");
     },
     onLogout() {
-      this.$secureStorage.setItem("isRequireLogin", false);
-      openURL(this.getLogoutUrl);
+      if(this.getLogoutUrl !== undefined && this.getLogoutUrl !== null){
+        this.$secureStorage.clear();
+        openURL(this.getLogoutUrl);
+      } else {
+        alert('already logged out')
+      }
     },
   },
   computed: {
-    getLoginUrl() {
-      return this.$keycloak !== undefined ? this.$keycloak.createLoginUrl() : null;
-    },
-    getLogoutUrl() {
-      return this.$keycloak !== undefined ? this.$keycloak.createLogoutUrl() : null;
-    },
-    getRegisterUrl() {
-      return this.$keycloak !== undefined ? this.$keycloak.createRegisterUrl() : null;
-    },
-    ...mapGetters({
-      dialog: "ui/getLoginDialog",
-      requireLogin: "ui/getRequireLogin",
-    }),
+    
   },
 };
 </script>

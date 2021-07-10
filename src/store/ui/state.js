@@ -4,5 +4,6 @@ export default function () {
     dialog: {
       login: false,
     },
+    keycloakInstance: null
   };
 }
