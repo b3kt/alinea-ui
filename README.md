@@ -1,4 +1,4 @@
-# WashNDry (washndry-ui)
+# Alinea App (alinea-ui)
 
 A Quasar Framework app
 
