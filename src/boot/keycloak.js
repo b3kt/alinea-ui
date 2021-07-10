@@ -2,7 +2,6 @@ import { boot } from "quasar/wrappers";
 import { vueKeycloak } from "@baloise/vue-keycloak";
 
 import { useKeycloak } from '@baloise/vue-keycloak'
-
 const {
   isAuthenticated,
   isPending,
@@ -76,13 +75,13 @@ export default boot(async ({ app, router, store }) => {
       } else {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
-        if (!app.config.globalProperties.$keycloak.isAuthenticated) {
+        if (isAuthenticated !== undefined || isAuthenticated !== null || isAuthenticated === true) {
+          next();
+        } else {
           next({
             path: "/403",
             query: { redirect: to.fullPath },
           });
-        } else {
-          next();
         }
       }
     } else {

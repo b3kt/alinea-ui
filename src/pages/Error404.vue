@@ -23,7 +23,7 @@ export default {
   name: "Error404",
   data() {
     return {
-      count: 2,
+      count: 1,
     };
   },
   mounted() {

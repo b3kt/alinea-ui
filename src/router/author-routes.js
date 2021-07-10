@@ -1,19 +1,19 @@
+import { secureStorage } from "boot/app";
 
-const routes = [
-  {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
+const session = secureStorage.getItem("session");
+const authorRoutes = () => {
+  if(session.isAuthenticated) {
+    return [
+      {
+        meta: { requiresAuth: true },
+        path: "stories",
+        component: () => import("pages/DashboardStories.vue"),
+      },
     ]
-  },
-
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
+  } else {
+    return []
   }
-]
+};
 
-export default routes
+console.log(authorRoutes());
+export default authorRoutes;

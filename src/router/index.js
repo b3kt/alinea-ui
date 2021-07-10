@@ -33,8 +33,5 @@ export default route(function ( { store, ssrContext } ) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
-
-  console.log(store.getters['ui/getKeycloakInstance']);
-
   return Router
 })

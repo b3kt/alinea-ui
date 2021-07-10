@@ -1,51 +1,68 @@
 <template>
-  <q-item
-    clickable
-    tag="a"
-    target="_blank"
-    :href="link"
-  >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
-      <q-icon :name="icon" />
-    </q-item-section>
+  <div v-if="isAuthenticated">
+    <q-list class="rounded-borders">
+      <div>
+        <ViewSwitcher />
+      </div>
 
-    <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>
-        {{ caption }}
-      </q-item-label>
-    </q-item-section>
-  </q-item>
+      <div v-for="(item, index) in menus" v-bind:key="index">
+        <q-item v-if="item.menu.children.length === 0" :to="item.menu.target_url">
+          <q-item-section
+            v-if="item.menu.icon !== undefined && item.menu.icon !== null"
+            avatar
+          >
+            <q-icon :name="item.menu.icon" />
+          </q-item-section>
+          <q-item-section>{{ item.menu.label }}</q-item-section>
+        </q-item>
+
+        <q-expansion-item
+          group="menu"
+          v-else
+          expand-separator
+          :icon="item.menu.icon"
+          :label="item.menu.label"
+        >
+          <q-item
+            class="bg-blue-grey-1 q-pl-lg"
+            clickable
+            :inset-level="0"
+            v-for="(item1, index1) in item.menu.children"
+            v-bind:key="index1"
+            :to="item1.target_url"
+          >
+            <q-item-section avatar v-if="item1.icon !== undefined && item1.icon !== null">
+              <q-icon :name="item1.icon" />
+            </q-item-section>
+            <q-item-section>{{ item1.label }}</q-item-section>
+          </q-item>
+        </q-expansion-item>
+      </div>
+      <!-- <q-item @click.stop="doLogout()" clickable>
+        <q-item-section avatar>
+          <q-icon name="la la-power-off" />
+        </q-item-section>
+        <q-item-section>{{ $t("logout") }}</q-item-section>
+      </q-item> -->
+    </q-list>
+  </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import ViewSwitcher from "components/ViewSwitcher";
+import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
 
 export default defineComponent({
-  name: 'EssentialLink',
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-
-    caption: {
-      type: String,
-      default: ''
-    },
-
-    link: {
-      type: String,
-      default: '#'
-    },
-
-    icon: {
-      type: String,
-      default: ''
-    }
+  name: "EssentialLink",
+  components: { ViewSwitcher },
+  computed: {
+    ...mapGetters({
+      menus: "model/getMenus",
+    }),
+  },
+  mounted() {
+    this.$store.dispatch("model/fetchMenus");
   }
-})
+});
 </script>

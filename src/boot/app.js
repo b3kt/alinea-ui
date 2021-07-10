@@ -25,6 +25,19 @@ const secureStorage = new SecureStorage(localStorage, {
   },
 });
 
+const getContextHeaders = () => {
+  const session = secureStorage.getItem("session");
+  if (session !== undefined && session !== null){
+    return {
+      headers: {
+        "Authorization": "Bearer " + session.token,
+      }
+    }
+  } else {
+    return {}
+  }
+} 
+
 export default boot(async ({ app, router }) => {
   localforage.config({
     driver: localforage.INDEXEDDB, // Force WebSQL; same as using setDriver()
@@ -109,9 +122,6 @@ export default boot(async ({ app, router }) => {
     },
     methods: {
       initSession() {
-        console.log("--");
-        console.log(keycloak);
-        console.log("--");
         if(isAuthenticated.value){
           const obtainedRoles = this.$secureStorage.getItem("session"); 
           if(obtainedRoles === undefined || obtainedRoles === null){
@@ -125,6 +135,9 @@ export default boot(async ({ app, router }) => {
             });
           }
         }
+      },
+      doLogout() {
+        alert('asd');
       }
     },
     created() {
@@ -134,4 +147,4 @@ export default boot(async ({ app, router }) => {
   app.mixin(mixins);
 });
 
-export { secureStorage }
+export { secureStorage, getContextHeaders }

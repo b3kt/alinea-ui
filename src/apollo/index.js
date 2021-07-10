@@ -7,9 +7,11 @@ export /* async */ function getClientOptions(/* {app, router, ...} */ options) {
         uri:
           process.env.GRAPHQL_URI ||
           // Change to your graphql endpoint.
-          'https://example.com/graphql',
+          'https://alinea-hasura.herokuapp.com/v1/graphql',
       }),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
     },
     // Specific Quasar mode options.
     process.env.MODE === 'spa'
