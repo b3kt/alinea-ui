@@ -1,91 +1,191 @@
 import { boot } from "quasar/wrappers";
-import { vueKeycloak } from "@baloise/vue-keycloak";
-
-import { useKeycloak } from '@baloise/vue-keycloak'
-const {
-  isAuthenticated,
-  isPending,
-  hasFailed,
-  token,
-  decodedToken,
-  username,
-  roles,
-  keycloak,
-
-  // Functions
-  hasRoles,
-} = useKeycloak()
+import Keycloak from "keycloak-js";
+import vue from "vue";
+// import jwtDecode from "jwt-decode";
 
 // keycloak configuration
-const keycloakConfig = {
+const options = {
   initOptions: {
     flow: "standard", // default
     checkLoginIframe: false, // default
     onLoad: "login-required", // login-required default
   },
   config: {
-    url: "https://alinea-keycloak.herokuapp.com/auth/",
+    url: "https://lemur-4.cloud-iam.com/auth/",
     realm: "alinea",
     clientId: "account",
   },
 };
 
-// async function initAsync(app,store) {
-//   if(app !== undefined && store !== undefined){
-//     app.use(vueKeycloak, keycloakConfig);
-//     store.commit("ui/setKeycloakInstance", app.config.globalProperties.$keycloak);
-//   }
-// }
-
-function initSync(app,store) {
-  // if(app !== undefined && store !== undefined){
-  //   (async () => initAsync(app,store))();
-  // }
-  app.use(vueKeycloak, keycloakConfig);
-  store.commit("ui/setKeycloakInstance", app.config.globalProperties.$keycloak);
+function _interopDefaultLegacy(e) {
+  return e && typeof e === "object" && "default" in e ? e : { default: e };
 }
+const Keycloak__default = /*#__PURE__*/ _interopDefaultLegacy(Keycloak);
+// const jwtDecode__default = /*#__PURE__*/ _interopDefaultLegacy(jwtDecode);
+
+// const state = vue.reactive({
+//   isAuthenticated: false,
+//   hasFailed: false,
+//   isPending: false,
+//   token: "",
+//   decodedToken: {},
+//   username: "",
+//   roles: [],
+// });
+// const setToken = (token) => {
+//   state.token = token;
+//   const content = jwtDecode__default["default"](state.token);
+//   state.decodedToken = content;
+//   state.roles = content.realm_access.roles;
+//   state.username = content.preferred_username;
+// };
+// const hasFailed = (value) => {
+//   state.hasFailed = value;
+// };
+// const isPending = (value) => {
+//   state.isPending = value;
+// };
+// const isAuthenticated = (value) => {
+//   state.isAuthenticated = value;
+// };
+
+function isPromise(promise) {
+  return !isNil(promise) && typeof promise.then === "function";
+}
+function isFunction(fun) {
+  return !isNil(fun) && typeof fun === "function";
+}
+function isString(text) {
+  return !isNil(text) && (typeof text === "string" || text instanceof String);
+}
+function isNil(value) {
+  return value === undefined || value === null;
+}
+
+// exports.getKeycloak = getKeycloak;
+// exports.getToken = getToken;
+// exports.isTokenReady = isTokenReady;
+// exports.useKeycloak = useKeycloak;
+// exports.vueKeycloak = vueKeycloak;
 
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ app, router, store }) => {
-  
-  // set default value
-  // app.config.globalProperties.$keycloak = {
-  //   isAuthenticated: false,
-  //   token: null
-  // }
-
-  // to handle session in public routes
-  if(app.config.globalProperties.$secureStorage.getItem('isRequireLogin')){
-    initSync(app,store);
+  let $keycloak = undefined;
+  async function isTokenReady() {
+    return new Promise((resolve) => checkToken(resolve));
   }
-  
-  // check router which is require authentication
-  router.beforeEach((to, from, next) => {
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-  
-      if (
-        app.config.globalProperties.$keycloak === undefined ||
-        app.config.globalProperties.$keycloak === null
-      ) {
-        // store to secured localstorage
-        app.config.globalProperties.$secureStorage.setItem('isRequireLogin', true);
-        initSync(app,store);
-        next();
-      } else {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-        if (isAuthenticated !== undefined || isAuthenticated !== null || isAuthenticated === true) {
-          next();
-        } else {
-          next({
-            path: "/403",
-            query: { redirect: to.fullPath },
-          });
-        }
-      }
+  const checkToken = (resolve) => {
+    if (!isNil($keycloak) && !isNil($keycloak.token)) {
+      resolve();
     } else {
-      next(); // make sure to always call next()!
+      setTimeout(() => checkToken(resolve), 500);
     }
-  });
+  };
+  function getKeycloak() {
+    return $keycloak;
+  }
+  async function getToken() {
+    return updateToken();
+  }
+  async function updateToken() {
+    if (!$keycloak) {
+      throw new Error("Keycloak is not initialized.");
+    }
+    try {
+      await $keycloak.updateToken(10);
+      store.commit('keycloak/setToken',$keycloak.token);
+    } catch (error) {
+      store.commit('keycloak/hasFailed',true);
+      throw new Error(
+        "Failed to refresh the token, or the session has expired"
+      );
+    }
+    return $keycloak.token;
+  }
+  function createKeycloak(config) {
+    $keycloak = Keycloak__default["default"](config);
+    return getKeycloak();
+  }
+  async function initKeycloak(initConfig) {
+    try {
+      store.commit('keycloak/isPending',true);
+      const _isAuthenticated = await $keycloak.init(initConfig);
+      store.commit('keycloak/isAuthenticated',_isAuthenticated);
+      if (!isNil($keycloak.token)) {
+        store.commit('keycloak/setToken',$keycloak.token);
+        $keycloak.onAuthRefreshSuccess = () => store.commit('keycloak/setToken',$keycloak.token);;
+      }
+      $keycloak.onTokenExpired = () => updateToken();
+    } catch (error) {
+      console.log(error)
+
+      store.commit('keycloak/hasFailed',true);
+      store.commit('keycloak/isAuthenticated',false);
+      throw new Error("Could not read access token");
+    } finally {
+      store.commit('keycloak/isPending',false);
+    }
+  }
+
+  const useKeycloak = () => {
+    return Object.assign(Object.assign({}, vue.toRefs(state)), {
+      keycloak: getKeycloak(),
+      hasRoles: (roles) =>
+        !isNil(roles) &&
+        state.isAuthenticated &&
+        roles.every((role) => state.roles.includes(role)),
+    });
+  };
+
+  const defaultInitConfig = {
+    flow: "standard",
+    checkLoginIframe: false,
+    onLoad: "login-required",
+  };
+
+  function loadJsonConfig(url) {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.overrideMimeType("application/json");
+      xhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+          if (200 <= this.status && this.status <= 400) {
+            const jsonResponse = this.responseText;
+            const response = JSON.parse(jsonResponse);
+            resolve(response);
+          } else {
+            reject("Could not load " + url + " file");
+          }
+        }
+      };
+      xhttp.open("GET", url, true);
+      xhttp.send();
+    });
+  }
+
+  if (isNil(options)) {
+    throw new Error("The Keycloak.KeycloakConfig are requried");
+  }
+  let keycloakPluginConfig;
+  if (isString(options)) {
+    keycloakPluginConfig = await loadJsonConfig(options);
+  } else if (isPromise(options) || isFunction(options)) {
+    keycloakPluginConfig = await options();
+  } else {
+    keycloakPluginConfig = options;
+  }
+  const keycloakConfig = keycloakPluginConfig.config;
+
+  const keycloakInitOptions = !isNil(keycloakPluginConfig.initOptions)
+    ? Object.assign(
+        Object.assign({}, defaultInitConfig),
+        keycloakPluginConfig.initOptions
+      )
+    : defaultInitConfig;
+  const _keycloak = createKeycloak(keycloakConfig);
+
+  app.config.globalProperties.$keycloak = _keycloak;
+  await initKeycloak(keycloakInitOptions);
+
 });

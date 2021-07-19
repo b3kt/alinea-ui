@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 
 import ui from "./ui";
 import model from "./model";
+import keycloak from "./keycloak";
 
 /*
  * If not building with SSR mode, you can
@@ -17,7 +18,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
       ui,
-      model
+      model,
+      keycloak
     },
 
     // enable strict mode (adds overhead!)

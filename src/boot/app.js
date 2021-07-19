@@ -4,8 +4,9 @@ import SecureStorage from "secure-web-storage";
 import { sha256 } from "js-sha256";
 import localforage from "localforage";
 import { mapGetters } from "vuex";
+import { openURL } from "quasar";
 
-import { useKeycloak } from "@baloise/vue-keycloak";
+import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
 
 const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
 const secureStorage = new SecureStorage(localStorage, {
@@ -27,18 +28,22 @@ const secureStorage = new SecureStorage(localStorage, {
 
 const getContextHeaders = () => {
   const session = secureStorage.getItem("session");
-  if (session !== undefined && session !== null){
+  if (session !== undefined && session !== null) {
     return {
       headers: {
-        "Authorization": "Bearer " + session.token,
-      }
-    }
+        Authorization: "Bearer " + session.token,
+      },
+    };
   } else {
-    return {}
+    return {};
   }
-} 
+};
 
 export default boot(async ({ app, router }) => {
+
+  const VueDynamicForms = createDynamicForms({});
+  app.use(VueDynamicForms);
+
   localforage.config({
     driver: localforage.INDEXEDDB, // Force WebSQL; same as using setDriver()
     name: "alineaApp",
@@ -57,28 +62,14 @@ export default boot(async ({ app, router }) => {
   // SECURE LOCALSTORAGE UTILS
   app.config.globalProperties.$secureStorage = secureStorage;
 
-  const {
-    isAuthenticated,
-    isPending,
-    hasFailed,
-    token,
-    decodedToken,
-    username,
-    roles,
-    keycloak,
-
-    // Functions
-    hasRoles,
-  } = useKeycloak();
-
   //MIXIN
   const mixins = {
     data() {
       return {
         config: {
           appName: "Alinea",
-          dmsUploadURL: "https://dms.berdaya.in/upload",
-          dmsDeleteURL: "https://dms.berdaya.in/",
+          dmsUploadURL: "https://alineadms.pagekite.me/upload",
+          dmsDeleteURL: "https://alineadms.pagekite.me/",
           defaultImageURL:
             "https://via.placeholder.com/200x300/00a89c/ffffff?text=No%20Cover",
         },
@@ -92,59 +83,78 @@ export default boot(async ({ app, router }) => {
     computed: {
       isAuthenticated() {
         const session = this.$secureStorage.getItem("session");
-        return session !== undefined && session !== null ? session.isAuthenticated : false;
+        return session !== undefined && session !== null
+          ? session.isAuthenticated
+          : false;
       },
       getSession() {
         const session = this.$secureStorage.getItem("session");
-        return session !== undefined && session !== null ? session : {}; 
+        return session !== undefined && session !== null ? session : {};
       },
       getLoginUrl() {
-        return this.$keycloak !== undefined ? this.$keycloak.createLoginUrl() : null;
+        return this.$keycloak !== undefined
+          ? this.$keycloak.createLoginUrl()
+          : null;
       },
       getLogoutUrl() {
-        return this.$keycloak !== undefined ? this.$keycloak.createLogoutUrl() : null;
+        return this.$keycloak !== undefined
+          ? this.$keycloak.createLogoutUrl()
+          : null;
       },
       getRegisterUrl() {
-        return this.$keycloak !== undefined ? this.$keycloak.createRegisterUrl() : null;
+        return this.$keycloak !== undefined
+          ? this.$keycloak.createRegisterUrl()
+          : null;
       },
-      getUserUID(){
+      getUserUID() {
         const session = this.$secureStorage.getItem("session");
-        return session !== undefined && session !== null ? session.decodedToken.sub : null; 
+        return session !== undefined && session !== null
+          ? session.decodedToken.sub
+          : null;
       },
-      getUserGroups(){
+      getUserGroups() {
         const session = this.$secureStorage.getItem("session");
-        return session !== undefined && session !== null ? session : null; 
+        return session !== undefined && session !== null ? session : null;
       },
       ...mapGetters({
-        dialog: "ui/getLoginDialog",
+        loginDialog: "ui/getLoginDialog",
+        dashboardDialog: "ui/getDashboardDialog",
         requireLogin: "ui/getRequireLogin",
+        isAuthenticated: "keycloak/isAuthenticated",
       }),
     },
     methods: {
-      initSession() {
-        if(isAuthenticated.value){
-          const obtainedRoles = this.$secureStorage.getItem("session"); 
-          if(obtainedRoles === undefined || obtainedRoles === null){
-            this.$secureStorage.setItem("session", {
-              isAuthenticated: isAuthenticated.value,
-              roles: roles.value,
-              username: username.value,
-              token: token.value,
-              decodedToken: decodedToken.value,
-              // keycloak: keycloak
-            });
-          }
+      // initSession() {
+      //   if (isAuthenticated.value) {
+      //     const obtainedRoles = this.$secureStorage.getItem("session");
+      //     if (obtainedRoles === undefined || obtainedRoles === null) {
+      //       this.$secureStorage.setItem("session", {
+      //         isAuthenticated: isAuthenticated.value,
+      //         roles: roles.value,
+      //         username: username.value,
+      //         token: token.value,
+      //         decodedToken: decodedToken.value,
+      //         // keycloak: keycloak
+      //       });
+      //     }
+      //   }
+      // },
+      doLogout() {
+        if (this.getLogoutUrl !== undefined && this.getLogoutUrl !== null) {
+          this.$secureStorage.clear();
+          openURL(this.getLogoutUrl);
+        } else {
+          alert("already logged out");
         }
       },
-      doLogout() {
-        alert('asd');
-      }
     },
     created() {
-      this.initSession();
+      //this.initSession();
     },
   };
   app.mixin(mixins);
+
+  console.log(app);
 });
 
-export { secureStorage, getContextHeaders }
+export { secureStorage, getContextHeaders };

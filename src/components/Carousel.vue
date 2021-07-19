@@ -1,8 +1,6 @@
 <template>
   <q-carousel
     v-model="slide"
-    transition-prev="scale"
-    transition-next="scale"
     swipeable
     animated
     control-color="white"

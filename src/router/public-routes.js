@@ -35,7 +35,7 @@ const routes = [
     meta: { requiresAuth: false },
     name: "author",
     path: "/author",
-    component: () => import("layouts/MainLayout.vue"),
+    component: () => import("layouts/AuthorLayout.vue"),
     children: authorRoutes()
   },
   // Always leave this as last one,

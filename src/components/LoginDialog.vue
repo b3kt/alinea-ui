@@ -3,11 +3,11 @@
     <q-btn v-if="!isAuthenticated" outline @click="onShowLoginDialog()">
       {{ $t("login") }}
     </q-btn>
-    <q-btn v-else outline @click="onLogout()">
+    <q-btn v-else outline @click="doLogout()">
       {{ $t("logout") }}
     </q-btn>
 
-    <q-dialog v-model="dialog">
+    <q-dialog v-model="loginDialog">
       <q-card class="my-card">
         <q-img lazy src="https://cdn.quasar.dev/img/chicken-salad.jpg" height="150px" />
         <q-separator />
@@ -39,15 +39,7 @@ export default {
   methods: {
     onShowLoginDialog() {
       this.$store.commit("ui/showLoginDialog");
-    },
-    onLogout() {
-      if(this.getLogoutUrl !== undefined && this.getLogoutUrl !== null){
-        this.$secureStorage.clear();
-        openURL(this.getLogoutUrl);
-      } else {
-        alert('already logged out')
-      }
-    },
+    }
   },
   computed: {
     

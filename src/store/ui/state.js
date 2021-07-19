@@ -3,6 +3,7 @@ export default function () {
     requireLogin: false,
     dialog: {
       login: false,
+      dashboard: false,
     },
     keycloakInstance: null
   };
