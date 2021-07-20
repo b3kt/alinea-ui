@@ -13,7 +13,7 @@ export function setToken(state, token) {
   state.roles = content.realm_access.roles;
   state.username = content.preferred_username;
 
-  secureStorage.setItem(state);
+  secureStorage.setItem('session', Object.assign({},state));
 }
 
 export function hasFailed(state, value) {

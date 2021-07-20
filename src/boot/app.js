@@ -28,14 +28,14 @@ const secureStorage = new SecureStorage(localStorage, {
 
 const getContextHeaders = () => {
   const session = secureStorage.getItem("session");
-  if (session !== undefined && session !== null) {
+  if (session !== undefined && session !== null && session.token !== undefined && session.token !== null) {
     return {
       headers: {
         Authorization: "Bearer " + session.token,
       },
     };
   } else {
-    return {};
+    return null;
   }
 };
 
@@ -153,8 +153,6 @@ export default boot(async ({ app, router }) => {
     },
   };
   app.mixin(mixins);
-
-  console.log(app);
 });
 
 export { secureStorage, getContextHeaders };

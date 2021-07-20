@@ -19,6 +19,4 @@ const authorRoutes = () => {
     return []
   }
 };
-
-console.log(authorRoutes());
 export default authorRoutes;

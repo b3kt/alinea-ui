@@ -62,7 +62,9 @@ export default defineComponent({
     }),
   },
   mounted() {
-    this.$store.dispatch("model/fetchMenus");
+    if(!this.$keycloak.isTokenExpired()){
+      this.$store.dispatch("model/fetchMenus");
+    }
   }
 });
 </script>

@@ -32,6 +32,9 @@ export default {
         this.$store.dispatch("model/switchView", {
           role: mode,
           uuid: this.getSession.decodedToken.sub,
+        }).then((resp) => {
+          this.$store.dispatch('keycloak/assignRole', resp);
+          this.$store.dispatch('model/fetchMenus');
         });
       }
     },

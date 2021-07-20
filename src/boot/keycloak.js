@@ -62,12 +62,6 @@ function isNil(value) {
   return value === undefined || value === null;
 }
 
-// exports.getKeycloak = getKeycloak;
-// exports.getToken = getToken;
-// exports.isTokenReady = isTokenReady;
-// exports.useKeycloak = useKeycloak;
-// exports.vueKeycloak = vueKeycloak;
-
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ app, router, store }) => {
@@ -114,12 +108,13 @@ export default boot(async ({ app, router, store }) => {
       store.commit('keycloak/isAuthenticated',_isAuthenticated);
       if (!isNil($keycloak.token)) {
         store.commit('keycloak/setToken',$keycloak.token);
-        $keycloak.onAuthRefreshSuccess = () => store.commit('keycloak/setToken',$keycloak.token);;
+        $keycloak.onAuthRefreshSuccess = () => {store.commit('keycloak/setToken',$keycloak.token); };
+        $keycloak.onTokenExpired = () => updateToken();
+      } else {
+        store.commit('keycloak/isAuthenticated',false);
+        throw new Error("Could not read access token");
       }
-      $keycloak.onTokenExpired = () => updateToken();
     } catch (error) {
-      console.log(error)
-
       store.commit('keycloak/hasFailed',true);
       store.commit('keycloak/isAuthenticated',false);
       throw new Error("Could not read access token");

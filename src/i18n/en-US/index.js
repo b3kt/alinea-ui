@@ -213,5 +213,7 @@ export default {
   keyword: "Keyword",
   sort: "Sort",
   redirecting_in: "Redirecting in",
-  go_home: "Go home"
+  go_home: "Go home",
+  user: "User",
+  browse: "Browse"
 }
