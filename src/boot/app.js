@@ -124,21 +124,6 @@ export default boot(async ({ app, router }) => {
       }),
     },
     methods: {
-      // initSession() {
-      //   if (isAuthenticated.value) {
-      //     const obtainedRoles = this.$secureStorage.getItem("session");
-      //     if (obtainedRoles === undefined || obtainedRoles === null) {
-      //       this.$secureStorage.setItem("session", {
-      //         isAuthenticated: isAuthenticated.value,
-      //         roles: roles.value,
-      //         username: username.value,
-      //         token: token.value,
-      //         decodedToken: decodedToken.value,
-      //         // keycloak: keycloak
-      //       });
-      //     }
-      //   }
-      // },
       doLogout() {
         if (this.getLogoutUrl !== undefined && this.getLogoutUrl !== null) {
           this.$secureStorage.clear();

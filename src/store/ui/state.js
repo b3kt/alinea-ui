@@ -4,6 +4,11 @@ export default function () {
     dialog: {
       login: false,
       dashboard: false,
+      form: {
+        title: null,
+        schema: {},
+        model: {}
+      }
     },
     keycloakInstance: null
   };

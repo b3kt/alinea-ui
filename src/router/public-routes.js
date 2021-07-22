@@ -1,9 +1,10 @@
-import authorRoutes from "./author-routes"
+import authorRoutes from "./author-routes.js";
+import userRoutes from "./user-routes.js";
 
 const childrenRoutes = [
   {
     meta: { requiresAuth: false },
-    path: "",
+    path: "/:catchAll(.*)*",
     component: () => import("pages/Index.vue"),
   },
   {
@@ -31,19 +32,18 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: childrenRoutes,
   },
-  {
-    meta: { requiresAuth: false },
-    name: "author",
-    path: "/author",
-    component: () => import("layouts/AuthorLayout.vue"),
-    children: authorRoutes()
-  },
+  userRoutes,
+  authorRoutes,
   // Always leave this as last one,
   // but you can also remove it
+  // {
+  //   path: "/:catchAll(.*)*",
+  //   component: () => import("pages/Error404.vue"),
+  // },
   {
-    path: "/:catchAll(.*)*",
-    component: () => import("pages/Error404.vue"),
-  },
+    path: "/error",
+    component: () => import("layouts/ErrorLayout.vue"),
+  },  
 ];
 
 export default routes;

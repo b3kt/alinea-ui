@@ -1,6 +1,7 @@
 import { boot } from "quasar/wrappers";
 import Keycloak from "keycloak-js";
 import vue from "vue";
+import { secureStorage } from "boot/app";
 // import jwtDecode from "jwt-decode";
 
 // keycloak configuration
@@ -21,33 +22,6 @@ function _interopDefaultLegacy(e) {
   return e && typeof e === "object" && "default" in e ? e : { default: e };
 }
 const Keycloak__default = /*#__PURE__*/ _interopDefaultLegacy(Keycloak);
-// const jwtDecode__default = /*#__PURE__*/ _interopDefaultLegacy(jwtDecode);
-
-// const state = vue.reactive({
-//   isAuthenticated: false,
-//   hasFailed: false,
-//   isPending: false,
-//   token: "",
-//   decodedToken: {},
-//   username: "",
-//   roles: [],
-// });
-// const setToken = (token) => {
-//   state.token = token;
-//   const content = jwtDecode__default["default"](state.token);
-//   state.decodedToken = content;
-//   state.roles = content.realm_access.roles;
-//   state.username = content.preferred_username;
-// };
-// const hasFailed = (value) => {
-//   state.hasFailed = value;
-// };
-// const isPending = (value) => {
-//   state.isPending = value;
-// };
-// const isAuthenticated = (value) => {
-//   state.isAuthenticated = value;
-// };
 
 function isPromise(promise) {
   return !isNil(promise) && typeof promise.then === "function";
@@ -112,9 +86,11 @@ export default boot(async ({ app, router, store }) => {
         $keycloak.onTokenExpired = () => updateToken();
       } else {
         store.commit('keycloak/isAuthenticated',false);
-        throw new Error("Could not read access token");
+        console.log("running guest mode");
       }
     } catch (error) {
+      console.log(error)
+
       store.commit('keycloak/hasFailed',true);
       store.commit('keycloak/isAuthenticated',false);
       throw new Error("Could not read access token");
@@ -181,6 +157,12 @@ export default boot(async ({ app, router, store }) => {
   const _keycloak = createKeycloak(keycloakConfig);
 
   app.config.globalProperties.$keycloak = _keycloak;
-  await initKeycloak(keycloakInitOptions);
 
+  const isRequireAuth = secureStorage.getItem("is_require_auth");
+  console.log(isRequireAuth)
+  console.log(_keycloak.authenticated)
+  if (!isNil(isRequireAuth) && isRequireAuth && (_keycloak.authenticated === undefined || !_keycloak.authenticated)) {
+    await initKeycloak(keycloakInitOptions);
+  }
+  
 });

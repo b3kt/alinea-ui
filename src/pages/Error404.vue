@@ -40,7 +40,7 @@ export default {
       }, 1000);
     } else {
       this.$store.commit('ui/hideLoginDialog');
-      this.$router.push("/");
+      // this.$router.push("/");
     }
   }
 };

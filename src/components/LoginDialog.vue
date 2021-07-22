@@ -14,7 +14,7 @@
         <q-card-section>
           <div class="row">
             <div class="col-12 text-center q-my-sm">
-              <q-btn color="primary" to="/login">{{ $t("login_with_alinea") }}</q-btn>
+              <q-btn color="primary" @click="setRequireAuth()">{{ $t("login_with_alinea") }}</q-btn>
             </div>
             <div class="col-12 text-center q-my-sm">
               <q-btn outline>{{ $t("login_with_google") }}</q-btn>
@@ -28,8 +28,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { openURL } from "quasar";
+import { secureStorage } from "boot/app"
 
 export default {
   name: 'LoginDialog',
@@ -39,6 +38,11 @@ export default {
   methods: {
     onShowLoginDialog() {
       this.$store.commit("ui/showLoginDialog");
+    },
+    setRequireAuth() {
+      secureStorage.setItem("is_require_auth", true);
+      this.$router.push("/login");
+      this.$router.go();
     }
   },
   computed: {

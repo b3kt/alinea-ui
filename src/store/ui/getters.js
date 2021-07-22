@@ -10,3 +10,6 @@ export function getRequireLogin (state) {
 export function getKeycloakInstance (state) {
     return state.keycloakInstance;
 }
+export function getDialogForm (state) {
+    return state.dialog.form;
+}

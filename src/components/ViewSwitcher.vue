@@ -26,16 +26,27 @@ export default {
   setup() {
     return {};
   },
+  mounted() {
+    const mode = this.$secureStorage.getItem("current_role");
+    if (mode === undefined || mode === null) {
+      this.$secureStorage.setItem("current_role", "user");
+    }
+  },
   methods: {
     onSwitchDashboard(mode) {
+      console.log(mode)
       if (mode !== undefined) {
-        this.$store.dispatch("model/switchView", {
-          role: mode,
-          uuid: this.getSession.decodedToken.sub,
-        }).then((resp) => {
-          this.$store.dispatch('keycloak/assignRole', resp);
-          this.$store.dispatch('model/fetchMenus');
-        });
+        this.$store
+          .dispatch("model/switchView", {
+            role: mode,
+            uuid: this.getSession.decodedToken.sub,
+          })
+          .then((resp) => {
+            this.$store.dispatch("keycloak/assignRole", resp);
+            this.$store.dispatch("model/fetchMenus");
+
+            this.$router.go();
+          });
       }
     },
   },

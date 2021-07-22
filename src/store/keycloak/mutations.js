@@ -14,6 +14,9 @@ export function setToken(state, token) {
   state.username = content.preferred_username;
 
   secureStorage.setItem('session', Object.assign({},state));
+  if(secureStorage.getItem("current_role") === undefined){
+    secureStorage.setItem("current_role", 'user');
+  }
 }
 
 export function hasFailed(state, value) {

@@ -10,11 +10,8 @@
           <q-avatar size="36px">
             <img src="https://cdn.quasar.dev/img/avatar.png" />
           </q-avatar>
-          <span class="q-px-sm">
-            Hi User
-          </span>
+          <span class="q-px-sm"> Hi User </span>
         </q-toolbar-title>
-
         <div class="q-ml-md">
           <q-btn class="q-ml-sm" outline @click="onCreateStory()">
             {{ $t("create_story") }}
@@ -30,60 +27,14 @@
           </q-btn>
         </div>
       </q-toolbar>
-
-      <!-- <q-tabs>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs> -->
     </q-header>
 
-    <!-- (Optional) The Footer -->
-    <!-- <q-footer>
-      <q-tabs switch-indicator>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs>
-
-      <q-toolbar>
-        <q-btn
-          flat
-          round
-          dense
-          icon="menu"
-          @click="toggleLeftDrawer"
-        />
-        <q-toolbar-title>
-          Footer
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer> -->
-
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
-    <q-drawer v-model="enabled" side="left" bordered class="bg-grey-2" :mini="leftDrawerOpen">
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered class="bg-grey-2">
       <EssentialLink />
     </q-drawer>
 
-    <DashboardDialog/>
+    <DashboardDialog />
 
     <q-page-container>
       <!-- This is where pages get injected -->
@@ -96,12 +47,13 @@
 import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import DashboardDialog from "components/DashboardDialog";
+import storySchema from "components/forms/story-form";
 
 export default {
   name: "AuthorLayout",
   components: {
     EssentialLink,
-    DashboardDialog
+    DashboardDialog,
   },
   setup() {
     const leftDrawerOpen = ref(false);
@@ -114,10 +66,18 @@ export default {
       },
     };
   },
+  mounted () {
+    console.log('------')
+    console.log(storySchema)
+    console.log('------')
+  },
   methods: {
-    onCreateStory(){
-      this.$store.commit("ui/showDashboardDialog");
-    }
-  }
+    onCreateStory() {
+      this.$store.commit("ui/showDashboardDialog", {
+        title: this.$t('create_story'),
+        schema: storySchema,
+      });
+    },
+  },
 };
 </script>
