@@ -18,6 +18,11 @@ const authorRouteFunction = () => {
         },
         {
           meta: { requiresAuth: true },
+          path: "story/:story_uid?",
+          component: () => import("pages/DashboardStory.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
           path: "account/info",
           component: () => import("pages/DashboardProfile.vue"),
         },

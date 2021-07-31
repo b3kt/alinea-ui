@@ -14,7 +14,7 @@ const options = {
   config: {
     url: "https://lemur-4.cloud-iam.com/auth/",
     realm: "alinea",
-    clientId: "account",
+    clientId: "alinea-ui",
   },
 };
 
@@ -84,16 +84,16 @@ export default boot(async ({ app, router, store }) => {
         store.commit('keycloak/setToken',$keycloak.token);
         $keycloak.onAuthRefreshSuccess = () => {store.commit('keycloak/setToken',$keycloak.token); };
         $keycloak.onTokenExpired = () => updateToken();
+        
       } else {
         store.commit('keycloak/isAuthenticated',false);
         console.log("running guest mode");
       }
     } catch (error) {
       console.log(error)
-
       store.commit('keycloak/hasFailed',true);
       store.commit('keycloak/isAuthenticated',false);
-      throw new Error("Could not read access token");
+      throw new Error("unable read access token");
     } finally {
       store.commit('keycloak/isPending',false);
     }

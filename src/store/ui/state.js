@@ -4,10 +4,12 @@ export default function () {
     dialog: {
       login: false,
       dashboard: false,
+      activation: false,
       form: {
         title: null,
         schema: {},
-        model: {}
+        model: {},
+        events: {},
       }
     },
     keycloakInstance: null

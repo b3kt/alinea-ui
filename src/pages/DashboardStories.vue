@@ -1,14 +1,6 @@
 <template>
   <div>
-    <q-toolbar class="bg-grey-3 shadow-1">
-      <q-btn flat round dense>
-        <q-icon name="menu" />
-      </q-btn>
-      <q-toolbar-title> Toolbar </q-toolbar-title>
-      <q-btn flat round dense>
-        <q-icon name="more_vert" />
-      </q-btn>
-    </q-toolbar>
+    <Toolbar />
     <q-page padding>
       <Widget :title="$t('my_stories')">
         <q-card bordered flat>
@@ -26,54 +18,35 @@
               v-bind:key="tb.id"
               :name="tb.id"
               :label="tb.label"
+              @click="onChangeTab(tb.id)"
             />
-            <q-space/>
-            <q-btn color="secondary" class="align-end" flat>
-              {{$t('create_story')}}
-            </q-btn>
           </q-tabs>
-          <q-list bordered class="rounded-borders">
-            <!-- <q-item-label header>Friends</q-item-label> -->
-
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar>
-                  <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
-                </q-avatar>
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label lines="1">Brunch this weekend?</q-item-label>
-                <q-item-label caption lines="2">
-                  <span class="text-weight-bold">Janet</span>
-                  -- I'll be in your neighborhood doing errands this weekend. Do you want
-                  to grab brunch?
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section side top> 1 min ago </q-item-section>
-            </q-item>
-
-            <q-separator inset="item" />
-
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar>
-                  <img src="https://cdn.quasar.dev/img/avatar4.jpg" />
-                </q-avatar>
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label lines="1">Linear Project</q-item-label>
-                <q-item-label caption lines="2">
-                  <span class="text-weight-bold">John</span>
-                  -- Can we schedule a call for tomorrow?
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section side top> 1 min ago </q-item-section>
-            </q-item>
-          </q-list>
+          <q-separator />
+          <q-card-section class="q-pa-md">
+            <q-input
+              v-model="text"
+              input-class="text-left"
+              standout="bg-grey text-white"
+              @blur="onFilter()"
+              :placeholder="$t('type_keyword_to_filter')"
+            >
+              <template v-slot:prepend>
+                <q-icon v-if="text === ''" name="search" />
+              </template>
+              <template v-slot:append>
+                <q-icon v-if="text !== ''" name="clear" class="cursor-pointer" @click="text = ''" />
+              </template>
+            </q-input>
+          </q-card-section>
+          <q-separator />
+          <div
+            bordered
+            class="rounded-borders q-col-gutter-lg fit row inline wrap justify-start items-start content-start q-pr-none q-pl-md q-py-md"
+          >
+            <div v-for="(story, idx) in getStories" v-bind:key="idx" class="">
+              <BookItem :data="story" :to="'/author/story/'+story.story_uid"/>
+            </div>
+          </div>
         </q-card>
       </Widget>
     </q-page>
@@ -81,16 +54,25 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import Widget from "components/Widget";
+import BookItem from "components/BookItem";
+import { secureStorage } from "boot/app";
+import { shallowRef, ref } from "vue";
+import Toolbar from "components/Toolbar";
+
 export default {
   name: "DashboardStories",
   components: {
     Widget,
+    BookItem,
+    Toolbar
   },
   data() {
     return {
+      text: null,
       tabs: [
-        { id: "STORY_STATUS_ALL", label: this.$t("my_stories") },
+        { id: "STORY_STATUS_ALL", label: this.$t("all_stories") },
         { id: "STORY_STATUS_DRAFT", label: this.$t("my_draft") },
         // { id: "STORY_STATUS_SUBMITTED", label: this.$t("submitted") },
         // { id: "STORY_STATUS_SCHEDULED", label: this.$t("scheduled") },
@@ -98,6 +80,22 @@ export default {
       ],
       tab: "STORY_STATUS_ALL",
     };
+  },
+  methods: {
+    onFilter() {
+      // alert('asdasda');
+    },
+    onChangeTab(tab){
+
+    }
+  },
+  mounted() {
+    this.$store.dispatch("model/fetchAuthorStories");
+  },
+  computed: {
+    ...mapGetters({
+      getStories: "model/getStories",
+    }),
   },
 };
 </script>

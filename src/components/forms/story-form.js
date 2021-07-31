@@ -1,5 +1,6 @@
 import { shallowRef, ref } from "vue";
 import FormText from "components/FormText.vue";
+import FormFile from "components/FormFile.vue";
 import FormSelect from "components/FormSelect.vue";
 import { SchemaForm, useSchemaForm } from "formvuelate";
 
@@ -19,6 +20,14 @@ const storySchema = {
     name: "intro",
     config: {
       type: "textarea",
+    },
+  },
+  cover: {
+    component: FormFile,
+    label: "Cover",
+    name: "cover",
+    config: {
+      type: "file",
     },
   },
   // work: {

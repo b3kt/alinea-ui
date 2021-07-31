@@ -43,6 +43,7 @@ export default {
           })
           .then((resp) => {
             this.$store.dispatch("keycloak/assignRole", resp);
+            this.$secureStorage.removeItem("menus");
             this.$store.dispatch("model/fetchMenus");
 
             this.$router.go();

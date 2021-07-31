@@ -1,6 +1,13 @@
 export default function () {
   return {
+    profile: null,
     user: {},
-    menus: []
+    menus: [],
+    detail: {
+      story: {},
+    },
+    feeds : {
+      stories: [],
+    }
   }
 }

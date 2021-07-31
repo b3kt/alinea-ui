@@ -4,9 +4,14 @@ import SecureStorage from "secure-web-storage";
 import { sha256 } from "js-sha256";
 import localforage from "localforage";
 import { mapGetters } from "vuex";
-import { openURL } from "quasar";
-
+import { openURL, Notify } from "quasar";
 import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
+
+Notify.setDefaults({
+  position: 'bottom-right',
+  timeout: 3000,
+  textColor: 'white'
+})
 
 const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
 const secureStorage = new SecureStorage(localStorage, {
@@ -121,9 +126,19 @@ export default boot(async ({ app, router }) => {
         dashboardDialog: "ui/getDashboardDialog",
         requireLogin: "ui/getRequireLogin",
         isAuthenticated: "keycloak/isAuthenticated",
+        myProfile: "model/getProfile",
       }),
     },
     methods: {
+      isNil(value) {
+        return value === undefined || value === null;
+      },
+      isNotEmpty(value) {
+        return value !== undefined && value !== null && value.length > 0;
+      }, 
+      onResetFormData() {
+        this.$store.commit('ui/resetFormModel');
+      },
       doLogout() {
         if (this.getLogoutUrl !== undefined && this.getLogoutUrl !== null) {
           this.$secureStorage.clear();

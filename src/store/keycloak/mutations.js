@@ -9,8 +9,10 @@ const jwtDecode__default = /*#__PURE__*/ _interopDefaultLegacy(jwtDecode);
 export function setToken(state, token) {
   state.token = token;
   const content = jwtDecode__default["default"](state.token);
+  console.log(content);
+  
   state.decodedToken = content;
-  state.roles = content.realm_access.roles;
+  state.roles = content.resource_access["alinea-ui"].roles;
   state.username = content.preferred_username;
 
   secureStorage.setItem('session', Object.assign({},state));

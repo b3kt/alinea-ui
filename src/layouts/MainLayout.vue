@@ -56,6 +56,7 @@
       <router-view />
     </q-page-container>
 
+
     [{{getSession}}]
     
   </q-layout>
@@ -72,10 +73,11 @@ export default defineComponent({
     EssentialLink,
     LoginDialog,
   },
-
+  mounted () {
+    this.$store.dispatch('model/fetchProfile');
+  },
   setup() {
     const leftDrawerOpen = ref(false);
-
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {

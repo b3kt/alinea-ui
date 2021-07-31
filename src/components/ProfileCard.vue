@@ -7,6 +7,7 @@
         icon="la la-edit"
         class="absolute text-white"
         style="top: 36px; right: 16px; transform: translateY(-50%); z-index: 999"
+        @click="onEditProfile()"
       >
         <q-tooltip>
           {{ $t("edit_profile") }}
@@ -45,10 +46,23 @@
 
 
 <script>
+import authorProfileSchema from "components/forms/author-profile-form";
 export default {
-  // name: 'ComponentName',
+  name: 'ProfileCard',
   setup () {
     return {}
+  },
+  methods: {
+    onEditProfile() {
+      this.$store.commit("ui/showDashboardDialog", {
+        title: this.$t('edit_profile'),
+        schema: authorProfileSchema,
+      });
+    }
+  },
+  mounted() {
+    
+    this.$store.dispatch('model/fetchProfile');
   }
 }
 </script>

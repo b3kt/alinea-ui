@@ -13,7 +13,7 @@
     "@asigloo/vue-dynamic-forms": "^3.15.4",
     "@baloise/vue-axios": "^1.0.0",
     "@baloise/vue-keycloak": "^1.5.0",
-    "@quasar/extras": "^1.10.8",
+    "@quasar/extras": "^1.10.9",
     "@vue/compiler-sfc": "^3.1.5",
     "axios": "^0.21.1",
     "biri": "^0.4.0",
@@ -42,7 +42,8 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "workbox-webpack-plugin": "^6.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

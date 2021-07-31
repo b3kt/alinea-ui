@@ -48,6 +48,7 @@ import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import DashboardDialog from "components/DashboardDialog";
 import storySchema from "components/forms/story-form";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AuthorLayout",
@@ -66,17 +67,47 @@ export default {
       },
     };
   },
-  mounted () {
-    console.log('------')
-    console.log(storySchema)
-    console.log('------')
+  mounted() {
   },
   methods: {
+    onSaveStory() {
+      const resp = this.$store.dispatch("model/saveStory", this.getDialogModel);
+      if (resp !== undefined && resp !== null) {
+        resp.then(() => {
+          this.$q.notify({ color: "positive", message: this.$t("succesfully_saved")});
+          this.$store.commit("ui/hideDashboardDialog");
+          this.getSecureStorage.removeItem("my-stories");
+          this.$store.dispatch("model/fetchAuthorStories");
+        });
+      }
+    },
     onCreateStory() {
       this.$store.commit("ui/showDashboardDialog", {
-        title: this.$t('create_story'),
+        title: this.$t("create_story"),
         schema: storySchema,
+        events: {
+          onSave: () => {
+            this.onSaveStory();
+          },
+        },
       });
+    },
+  },
+  computed: {
+    ...mapGetters({
+      getDialogForm: "ui/getDialogForm",
+    }),
+    getDialogTitle() {
+      return this.getDialogForm.title;
+    },
+    getDialogSchema() {
+      return this.getDialogForm.schema;
+    },
+    getDialogModel() {
+      return this.getDialogForm.model;
+    },
+    getDialogEvent() {
+      return this.getDialogForm.events;
     },
   },
 };

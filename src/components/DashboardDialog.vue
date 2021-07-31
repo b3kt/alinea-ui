@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="dashboardDialog" persistent :maximized="maximized">
+  <q-dialog v-model="dashboardDialog" persistent :maximized="maximized" @before-hide="onResetFormData()">
     <q-card class="my-card">
       <q-bar class="my-bar bg-grey-4 no-bottom-radius">
         <q-space />
@@ -25,7 +25,7 @@
             :label="$q.screen.gt.sm ? $t('save') : ''"
             icon="la la-save"
             class="q-ml-sm bg-primary text-white"
-            @click.prevent="onSave()"
+            @click.prevent="getDialogEvent.onSave()"
           >
             <q-tooltip>{{ $t("tooltip_save") }}</q-tooltip>
           </q-btn>
@@ -39,7 +39,6 @@
           </div>
         </div>
       </q-card-section>
-      <q-separator />
     </q-card>
   </q-dialog>
 </template>
@@ -56,8 +55,7 @@ export default {
     const userData = ref({});
     useSchemaForm(userData);
     return {
-      userData,
-      formSubmit,
+      userData
     };
   },
   data() {
@@ -67,7 +65,8 @@ export default {
   },
   methods: {
     onSave() {
-      console.log(this.getDialogModel)
+      console.log(this.getDialogModel);
+      
     },
     maximize() {
       this.maximized = true;
@@ -91,7 +90,10 @@ export default {
     },
     getDialogModel () {
       return this.getDialogForm.model;
-    }
+    },
+    getDialogEvent () {
+      return this.getDialogForm.events;
+    } 
   }
 };
 </script>

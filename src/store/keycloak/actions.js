@@ -47,9 +47,7 @@ export function assignRole(context, rolecode) {
             },
             context: contextHeaders,
             update: (store, { data: { insert_user_roles_one } }) => {
-              console.log("----");
               console.log(insert_user_roles_one);
-              console.log("----");
             },
             errorPolicy: "ignore",
           });

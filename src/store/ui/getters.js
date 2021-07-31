@@ -1,6 +1,9 @@
 export function getLoginDialog (state) {
     return state.dialog.login;
 }
+export function getActivationDialog (state) {
+    return state.dialog.activation;
+}
 export function getDashboardDialog (state) {
     return state.dialog.dashboard;
 }
@@ -13,3 +16,4 @@ export function getKeycloakInstance (state) {
 export function getDialogForm (state) {
     return state.dialog.form;
 }
+
