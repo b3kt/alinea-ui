@@ -19,7 +19,7 @@ export default {
   name: 'FormText',
   components: { FormField },
   props: {
-    // modelValue: { required: true },
+    value: { required: true },
     name: {
       type: String,
       required: true
@@ -58,8 +58,9 @@ export default {
     }
   },
   data() {
+    const val = this.value;
     return {
-      modelValue: null
+      modelValue: val
     }
   },
   computed: {

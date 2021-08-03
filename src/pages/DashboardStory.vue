@@ -13,39 +13,6 @@
               :onAddChapter="onAddChapter"
             />
           </q-card-section>
-          <!-- <q-separator />
-           -->
-
-          <!-- <q-card-section class="q-pa-md">
-            <q-input
-              v-model="text"
-              input-class="text-left"
-              standout="bg-grey text-white"
-              @blur="onFilter()"
-              :placeholder="$t('type_keyword_to_filter')"
-            >
-              <template v-slot:prepend>
-                <q-icon v-if="text === ''" name="search" />
-              </template>
-              <template v-slot:append>
-                <q-icon
-                  v-if="text !== ''"
-                  name="clear"
-                  class="cursor-pointer"
-                  @click="text = ''"
-                />
-              </template>
-            </q-input>
-          </q-card-section>
-          <q-separator /> -->
-          <!-- <div
-            bordered
-            class="rounded-borders q-col-gutter-lg fit row inline wrap justify-start items-start content-start q-pr-none q-pl-md q-py-md"
-          >
-            <div v-for="(story, idx) in getStories" v-bind:key="idx" class="">
-              <BookItem :data="story" :to="'/author/story/' + story.story_uid" />
-            </div>
-          </div> -->
         </q-card>
       </Widget>
       <div class="row q-col-gutter-md">
@@ -87,15 +54,32 @@ export default {
         this.$store.dispatch("model/findStoryByUid", raw);
       }
     },
+    populateFormModel () {
+      if(!this.isNil(this.getStory)){
+        storySchema.title.value = this.getStory.title;
+        storySchema.intro.value = this.getStory.description;
+      }
+    },
+    getUID(){
+      return this.$route.params.story_uid.split("&state=")[0];
+    },
     onSaveStory() {
-      const resp = this.$store.dispatch("model/saveStory", this.getDialogModel);
-      if (resp !== undefined && resp !== null) {
-        resp.then(() => {
-          this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
-          this.$store.commit("ui/hideDashboardDialog");
-          this.getSecureStorage.removeItem("my-stories");
-          this.$store.dispatch("model/fetchAuthorStories");
-        });
+      if(this.getDialogModel.title !== undefined && this.getDialogModel.intro !== undefined){
+        const vars = {
+          title: this.getDialogModel.title,
+          desc: this.getDialogModel.intro,
+          uid: this.getUID()
+        };
+        console.log(vars);
+        const resp = this.$store.dispatch("model/updateStory", vars);
+        if (resp !== undefined && resp !== null) {
+          resp.then(() => {
+            this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
+            this.$store.commit("ui/hideDashboardDialog");
+            this.getSecureStorage.removeItem("my-stories");
+            this.$store.dispatch("model/fetchAuthorStories");
+          });
+        }
       }
     },
     onAddChapter() {
@@ -104,12 +88,14 @@ export default {
         schema: chapterSchema,
         events: {
           onSave: () => {
-            this.onSaveStory();
+            this.onSaveChapter();
           },
         },
       });
     },
     onEditStory() {
+      this.populateFormModel ();
+
       this.$store.commit("ui/showDashboardDialog", {
         title: this.$t("edit_story"),
         schema: storySchema,
@@ -120,11 +106,18 @@ export default {
         },
       });
     },
+    onSaveChapter() {
+      alert('ayuy');
+    }
   },
   computed: {
     ...mapGetters({
       getStory: "model/getStory",
+      getDialogForm: "ui/getDialogForm",
     }),
+    getDialogModel(){
+      return this.getDialogForm.model;
+    }
   },
 };
 </script>

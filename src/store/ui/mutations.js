@@ -38,3 +38,6 @@ export function setFormSchema(state, schemaObj){
 export function resetFormModel(state){
   state.dialog.form.model = {};
 }
+export function setFormModel(state, modelObj){
+  state.dialog.form.model = modelObj;
+}

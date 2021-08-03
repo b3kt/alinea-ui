@@ -3,7 +3,7 @@ import { secureStorage, getContextHeaders } from "boot/app";
 import { fetchMenusQuery } from "../../apollo/query/role_menus";
 import { fetchSelfProfileQuery } from "../../apollo/query/author_profile";
 import { fetchStoriesPublicQuery, fetchMyStoriesQuery, findStoryByUidQuery } from "../../apollo/query/stories";
-import { storeStory } from "../../apollo/mutation/save_story";
+import { createStoryMutation, updateStoryMutation } from "../../apollo/mutation/save_story";
 
 const session = secureStorage.getItem("session");
 
@@ -60,7 +60,7 @@ export function fetchProfile(context) {
   }
 }
 
-export function saveStory(context, data) {
+export function createStory(context, data) {
   const current_role = secureStorage.getItem("current_role");
   const contextHeaders = getContextHeaders();
   if (
@@ -69,10 +69,28 @@ export function saveStory(context, data) {
     current_role === "author"
   ) {
     return apolloClientInstance
-      .mutate(storeStory(data, contextHeaders))
+      .mutate(createStoryMutation(data, contextHeaders))
       .then((response) => {
         if (response.data.insert_stories !== undefined && response.data.insert_stories !== null) {
           console.log(response.data.insert_stories);
+        }
+      });
+  }
+}
+
+export function updateStory(context, data) {
+  const current_role = secureStorage.getItem("current_role");
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null &&
+    current_role === "author"
+  ) {
+    return apolloClientInstance
+      .mutate(updateStoryMutation(data, contextHeaders))
+      .then((response) => {
+        if (response.data.update_stories !== undefined && response.data.update_stories !== null) {
+          console.log(response.data.update_stories);
         }
       });
   }

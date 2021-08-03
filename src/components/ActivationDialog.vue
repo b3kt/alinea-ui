@@ -126,7 +126,6 @@ export default {
     },
     onStepLoaded(value) {
       if (value === 2) {
-        console.log("asdasd");
       } else if (value === 3) {
         // this.fetchAuthorInfo();
       }

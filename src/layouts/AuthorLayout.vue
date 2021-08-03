@@ -67,11 +67,10 @@ export default {
       },
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     onSaveStory() {
-      const resp = this.$store.dispatch("model/saveStory", this.getDialogModel);
+      const resp = this.$store.dispatch("model/createStory", this.getDialogModel);
       if (resp !== undefined && resp !== null) {
         resp.then(() => {
           this.$q.notify({ color: "positive", message: this.$t("succesfully_saved")});
@@ -82,6 +81,7 @@ export default {
       }
     },
     onCreateStory() {
+      this.$store.commit("ui/resetFormModel");
       this.$store.commit("ui/showDashboardDialog", {
         title: this.$t("create_story"),
         schema: storySchema,

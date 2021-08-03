@@ -13,6 +13,7 @@ const storySchema = {
     config: {
       type: "text",
     },
+    value: null
   },
   intro: {
     component: FormText,
@@ -21,6 +22,7 @@ const storySchema = {
     config: {
       type: "textarea",
     },
+    value: null
   },
   cover: {
     component: FormFile,
@@ -29,6 +31,7 @@ const storySchema = {
     config: {
       type: "file",
     },
+    value: null
   },
   // work: {
   //   component: SchemaForm,

@@ -17,8 +17,8 @@
     </q-card>
 
     <q-card flat v-if="mode === 'detail'" class="q-ml-md col fit">
-      <q-card-section class="text-h6 title"> {{getTitle}} </q-card-section>
-      <q-card-section> {{getDescription}} </q-card-section>
+      <q-card-section class="text-h6 title q-py-sm"> {{getTitle}} </q-card-section>
+      <q-card-section class="ellipsis-3-lines q-pb-sm"> {{getDescription}} </q-card-section>
       <q-card-section >
         <q-btn
           dense
@@ -61,8 +61,7 @@ export default {
       required: true,
     },
     to: {
-      type: String,
-      required: true,
+      type: String
     },
     mode: {
       type: String,

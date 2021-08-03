@@ -32,8 +32,6 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: childrenRoutes,
   },
-  userRoutes,
-  authorRoutes,
   // Always leave this as last one,
   // but you can also remove it
   // {
@@ -45,5 +43,13 @@ const routes = [
     component: () => import("layouts/ErrorLayout.vue"),
   },  
 ];
+
+if(userRoutes !== undefined && userRoutes !== null && Object.keys(userRoutes).length > 0){
+  routes.push(userRoutes);
+}
+
+if(authorRoutes !== undefined && authorRoutes !== null && Object.keys(authorRoutes).length > 0){
+  routes.push(authorRoutes);
+}
 
 export default routes;

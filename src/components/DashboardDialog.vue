@@ -65,8 +65,6 @@ export default {
   },
   methods: {
     onSave() {
-      console.log(this.getDialogModel);
-      
     },
     maximize() {
       this.maximized = true;

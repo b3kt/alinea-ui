@@ -16,4 +16,7 @@ export function getKeycloakInstance (state) {
 export function getDialogForm (state) {
     return state.dialog.form;
 }
+export function getDialogModel (state) {
+    return state.dialog.form.model;
+}
 
