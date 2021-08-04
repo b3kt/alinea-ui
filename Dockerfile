@@ -1,15 +1,7 @@
-# develop stage
-FROM node:latest as develop-stage
-WORKDIR /app
-COPY package*.json ./
-RUN yarn global add @quasar/cli
-COPY . .
-# build stage
-FROM develop-stage as build-stage
-RUN yarn
-RUN quasar build -m pwa
-# production stage
-FROM nginx:latest as production-stage
-COPY --from=build-stage /app/dist/pwa /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM nginx:1.21.0
+
+COPY default.conf.template /etc/nginx/conf.d/default.conf.template
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY dist/pwa /usr/share/nginx/html
+
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
