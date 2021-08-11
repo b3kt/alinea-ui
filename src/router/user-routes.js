@@ -9,7 +9,7 @@ const userRouteFunction = () => {
       meta: { requiresAuth: false },
       name: "user",
       path: "/user",
-      component: () => import("layouts/AuthorLayout.vue"),
+      component: () => import("layouts/UserLayout.vue"),
       children: [
         {
           meta: { requiresAuth: true },
@@ -20,6 +20,26 @@ const userRouteFunction = () => {
           meta: { requiresAuth: true },
           path: "account/info",
           component: () => import("pages/DashboardProfile.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
+          path: "account/address",
+          component: () => import("pages/DashboardAddress.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
+          path: "account/bank",
+          component: () => import("pages/DashboardBankAccount.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
+          path: "account/security",
+          component: () => import("pages/DashboardSecurity.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
+          path: "dashboard/library",
+          component: () => import("pages/DashboardLibrary.vue"),
         },
       ],
     };

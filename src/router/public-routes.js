@@ -4,7 +4,12 @@ import userRoutes from "./user-routes.js";
 const childrenRoutes = [
   {
     meta: { requiresAuth: false },
-    path: "/:catchAll(.*)*",
+    path: ":catchAll(.*)*",
+    component: () => import("pages/Index.vue"),
+  },
+  {
+    meta: { requiresAuth: false },
+    path: "/",
     component: () => import("pages/Index.vue"),
   },
   {

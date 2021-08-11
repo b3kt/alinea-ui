@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Toolbar />
     <q-page padding>
       <Widget :title="$t('my_stories')">
         <q-card bordered flat>
@@ -59,14 +58,12 @@ import Widget from "components/Widget";
 import BookItem from "components/BookItem";
 import { secureStorage } from "boot/app";
 import { shallowRef, ref } from "vue";
-import Toolbar from "components/Toolbar";
 
 export default {
   name: "DashboardStories",
   components: {
     Widget,
     BookItem,
-    Toolbar
   },
   data() {
     return {

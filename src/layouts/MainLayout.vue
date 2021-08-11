@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lfr">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -56,8 +56,11 @@
       <router-view />
     </q-page-container>
 
-
-    [{{getSession}}]
+    <q-footer>
+      <Footer />
+    </q-footer>
+<!-- 
+    [{{getSession}}] -->
     
   </q-layout>
 </template>
@@ -65,6 +68,7 @@
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 import LoginDialog from "components/LoginDialog";
+import Footer from "components/Footer";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -72,6 +76,7 @@ export default defineComponent({
   components: {
     EssentialLink,
     LoginDialog,
+    Footer
   },
   mounted () {
     this.$store.dispatch('model/fetchProfile');

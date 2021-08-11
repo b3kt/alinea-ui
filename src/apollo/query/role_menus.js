@@ -3,10 +3,10 @@ import gql from "graphql-tag";
 export function fetchMenusQuery(vars, contextHeaders) {
   return {
     query: gql`
-      query fetchUserMenu($role: String!) {
+      query fetchUserMenu($role: String!, $childrole: String!) {
         menus: role_menus(
           where: {
-            menu: { parent_id: { _is_null: true } }
+            menu: { _or: { parent_id: { _is_null: true } } }
             user: { role: { _eq: $role } }
           }
           order_by: { menu: { sequence: asc } }
@@ -16,7 +16,9 @@ export function fetchMenusQuery(vars, contextHeaders) {
             label
             target_url
             js_event
-            children {
+            children(
+              where: { role_menus: { role: { code: { _eq: $childrole } } } }
+            ) {
               icon
               label
               target_url

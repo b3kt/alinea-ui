@@ -21,6 +21,69 @@ export function fetchStoriesPublicQuery() {
   };
 }
 
+export function fetchTopStoriesQuery() {
+  return {
+    query: gql`
+      query fetchTopStories {
+        stories : stories_top {
+          description
+          title
+          author{
+            name
+            bio
+          }
+          cover_img {
+            thumbnail_url
+            url
+          }
+        }
+      }
+    `,
+  };
+}
+
+export function fetchNewStoriesQuery() {
+  return {
+    query: gql`
+      query fetchNewStories {
+        stories : stories_new {
+          description
+          title
+          author{
+            name
+            bio
+          }
+          cover_img {
+            thumbnail_url
+            url
+          }
+        }
+      }
+    `,
+  };
+}
+
+export function fetchSaleStoriesQuery() {
+  return {
+    query: gql`
+      query fetchSaleStories {
+        stories : stories_sale {
+          description
+          title
+          author{
+            name
+            bio
+          }
+          cover_img {
+            thumbnail_url
+            url
+          }
+        }
+      }
+    `,
+  };
+}
+
 export function fetchMyStoriesQuery(contextHeaders) {
   return {
     query: gql`
@@ -51,6 +114,7 @@ export function findStoryByUidQuery(vars, contextHeaders) {
         stories(where: {story_uid: {_eq: $uid}}) {
           description
           title
+          story_uid
           author {
             name
             bio

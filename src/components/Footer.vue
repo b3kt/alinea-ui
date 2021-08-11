@@ -1,12 +1,21 @@
 <template>
-  <div>My component</div>
+  <div class="row q-px-md q-py-sm">
+    <div class="col">
+      <q-breadcrumbs separator="|" >
+        <q-breadcrumbs-el class="text-weight-light text-small text-white" label="&copy; 2021 @alinea.app" />
+        <q-breadcrumbs-el class="text-weight-light text-small text-white" :label="$t('about')" />
+        <q-breadcrumbs-el class="text-weight-light text-small text-white" :label="$t('careers')" />
+        <q-breadcrumbs-el class="text-weight-light text-small text-white" :label="$t('contact_us')" />
+      </q-breadcrumbs>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  // name: 'ComponentName',
-  setup () {
-    return {}
-  }
-}
+  name: "Footer",
+  setup() {
+    return {};
+  },
+};
 </script>

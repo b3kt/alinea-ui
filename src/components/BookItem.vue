@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <q-card class="book-item" v-if="!isNil(data)" flat>
+  <div :class="'row '+ classes">
+    <q-card class="book-item bg-transparent" v-if="!isNil(data)" flat>
       <q-img
         :src="getThumbnail"
         :ratio="2 / 3"
@@ -11,15 +11,19 @@
       />
       <q-card-section class="q-pa-sm" v-if="mode === 'simple'">
         <div class="row no-wrap items-center">
-          <div class="col ellipsis-2-lines text-weight-light">{{ getTitle }}</div>
+          <div class="col ellipsis text-weight-light">{{ getTitle }}</div>
+        </div>
+        <div class="row no-wrap items-center">
+          <div class="col ellipsis text-weight-light text-smaller text-primary">{{ getAuthor }}</div>
         </div>
       </q-card-section>
     </q-card>
 
-    <q-card flat v-if="mode === 'detail'" class="q-ml-md col fit">
-      <q-card-section class="text-h6 title q-py-sm"> {{getTitle}} </q-card-section>
-      <q-card-section class="ellipsis-3-lines q-pb-sm"> {{getDescription}} </q-card-section>
-      <q-card-section >
+    <q-card flat v-if="mode === 'detail'" class="bg-transparent col fit" style="width: 360px !important">
+      <q-card-section class="text-capitalize text-h6 ellipsis title q-py-xs"> {{getTitle}} </q-card-section>
+      <q-card-section class="col ellipsis text-weight-light text-small q-py-xs text-primary">{{ getAuthor }}</q-card-section>
+      <q-card-section class="ellipsis-2-lines text-weight-light q-pb-sm" style="height:60px"> {{getDescription}} </q-card-section>
+      <q-card-section v-if="isAuthenticated && !readonly">
         <q-btn
           dense
           outline
@@ -39,13 +43,15 @@
         <div class="q-btn q-btn--dense q-btn--outline q-btn--rectangle q-mr-sm">
           <q-checkbox color="positive" dense class="q-px-sm" v-model="published" :label="$t(published ? 'published':'private')" @click="published ? onUnpublishEvent() : onPublishEvent()"/>
         </div>
-         <q-btn
+      </q-card-section>
+      <q-card-section v-else>
+        <q-btn
           dense
-          outline
-          class="q-px-sm"
-          icon="la la-plus"
-          :label="$t('add_chapter')"
-          @click="onAddChapterEvent()"
+          size="sm"
+          flat
+          class="q-px-sm q-mr-sm text-primary"
+          :label="$t('read_more')"
+          @click="onEditEvent()"
         />
       </q-card-section>
     </q-card>
@@ -56,9 +62,23 @@
 export default {
   name: "BookItem",
   props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       required: true,
+    },
+    col: {
+      type: Number,
+      required: false,
+      default: 12
+    },
+    classes: {
+      type: String,
+      required: false,
+      default: ""
     },
     to: {
       type: String
@@ -126,10 +146,15 @@ export default {
   },
   computed: {
     getTitle() {
-      return this.data.title;
+      return this.data !== undefined && this.data !== null ? this.data.title : '';
+    },
+    getAuthor() {
+      return this.data !== undefined && this.data !== null 
+        && this.data.author !== undefined && this.data.author !== null 
+         ? this.data.author.name : null;
     },
     getDescription() {
-      return this.data.description;
+      return this.data !== undefined && this.data !== null ? this.data.description : null;
     },
     getThumbnail() {
       return this.isNotEmpty(this.data.cover_img)

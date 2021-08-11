@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Toolbar />
     <q-page padding>
       <!-- content -->
       <Widget :title="$t('my_stories')">
@@ -10,6 +9,7 @@
               :data="getStory"
               mode="detail"
               :onEdit="onEditStory"
+              :onDelete="onDeleteStory"
               :onAddChapter="onAddChapter"
             />
           </q-card-section>
@@ -17,8 +17,12 @@
       </Widget>
       <div class="row q-col-gutter-md">
         <div class="col-md-6 col-xs-12">
-          <Widget :title="$t('chapters')">
-            <ChapterList />
+          <Widget
+            :title="$t('chapters')"
+            :action="onAddChapter"
+            :actionLabel="$t('add_chapter')"
+          >
+            <ChapterList :data="getChapters" />
           </Widget>
         </div>
         <div class="col-md-6 col-xs-12">
@@ -33,7 +37,6 @@
 
 <script>
 import Widget from "components/Widget";
-import Toolbar from "components/Toolbar";
 import BookItem from "components/BookItem";
 import storySchema from "components/forms/story-form";
 import chapterSchema from "components/forms/chapter-form";
@@ -43,7 +46,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardStory",
-  components: { Widget, Toolbar, BookItem, ChapterList, CommentList },
+  components: { Widget, BookItem, ChapterList, CommentList },
   mounted() {
     this.initStory();
   },
@@ -54,32 +57,45 @@ export default {
         this.$store.dispatch("model/findStoryByUid", raw);
       }
     },
-    populateFormModel () {
-      if(!this.isNil(this.getStory)){
+    populateFormModel() {
+      if (!this.isNil(this.getStory)) {
         storySchema.title.value = this.getStory.title;
         storySchema.intro.value = this.getStory.description;
       }
     },
-    getUID(){
+    getUID() {
       return this.$route.params.story_uid.split("&state=")[0];
     },
     onSaveStory() {
-      if(this.getDialogModel.title !== undefined && this.getDialogModel.intro !== undefined){
+      if (
+        this.getDialogModel.title !== undefined &&
+        this.getDialogModel.intro !== undefined
+      ) {
         const vars = {
           title: this.getDialogModel.title,
           desc: this.getDialogModel.intro,
-          uid: this.getUID()
+          uid: this.getUID(),
         };
-        console.log(vars);
         const resp = this.$store.dispatch("model/updateStory", vars);
         if (resp !== undefined && resp !== null) {
           resp.then(() => {
             this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
             this.$store.commit("ui/hideDashboardDialog");
-            this.getSecureStorage.removeItem("my-stories");
-            this.$store.dispatch("model/fetchAuthorStories");
+            this.$store.commit("model/setStory", null);
+            this.initStory();
+            // this.getSecureStorage.removeItem("my-stories");
+            // this.$store.dispatch("model/fetchAuthorStories");
           });
         }
+      }
+
+      if(this.getDialogModel.cover !== undefined){
+        this.doUpload({
+          file: this.getDialogModel.cover,
+          name: 'story',
+          field: 'cover',
+          id: this.getStory.story_uid
+        });
       }
     },
     onAddChapter() {
@@ -94,7 +110,7 @@ export default {
       });
     },
     onEditStory() {
-      this.populateFormModel ();
+      this.populateFormModel();
 
       this.$store.commit("ui/showDashboardDialog", {
         title: this.$t("edit_story"),
@@ -106,18 +122,59 @@ export default {
         },
       });
     },
+    onDeleteStory() {
+      this.$q
+        .dialog({
+          title: this.$t("delete_confirm"),
+          message: this.$t("delete_confirm_msg"),
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          // console.log('>>>> OK')
+          alert('deleted')
+        })
+        .onCancel(() => {
+          // console.log('>>>> Cancel')
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
+    },
     onSaveChapter() {
-      alert('ayuy');
-    }
+      if (
+        this.getDialogModel.title !== undefined &&
+        this.getDialogModel.intro !== undefined
+      ) {
+        const vars = {
+          title: this.getDialogModel.title,
+          desc: this.getDialogModel.intro,
+          uid: this.sanitize(this.$route.params.story_uid),
+        };
+        console.log(vars);
+        const resp = this.$store.dispatch("model/createChapter", vars);
+        if (resp !== undefined && resp !== null) {
+          resp.then(() => {
+            this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
+            this.$store.commit("ui/hideDashboardDialog");
+          });
+        }
+      }
+    },
   },
   computed: {
     ...mapGetters({
       getStory: "model/getStory",
       getDialogForm: "ui/getDialogForm",
     }),
-    getDialogModel(){
+    getDialogModel() {
       return this.getDialogForm.model;
-    }
+    },
+    getChapters() {
+      return this.getStory !== undefined && this.getStory !== null
+        ? this.getStory.chapters
+        : null;
+    },
   },
 };
 </script>

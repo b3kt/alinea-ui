@@ -3,7 +3,7 @@
     <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
-    <q-header class="bg-secondary">
+    <q-header bordered>
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
@@ -13,22 +13,17 @@
           <span class="q-px-sm"> Hi User </span>
         </q-toolbar-title>
         <div class="q-ml-md">
-          <q-btn class="q-ml-sm" outline @click="onCreateStory()">
-            {{ $t("create_story") }}
-            <q-tooltip>
-              {{ $t("explore_stories") }}
-            </q-tooltip>
-          </q-btn>
           <q-btn class="q-ml-sm" outline>
-            {{ $t("sales_balance") }}
+            {{ $t("wallet") }}
             <q-tooltip>
               {{ $t("explore_books") }}
             </q-tooltip>
           </q-btn>
         </div>
       </q-toolbar>
-      <Toolbar />
+      <Toolbar /> 
     </q-header>
+
 
     <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
     <q-drawer v-model="leftDrawerOpen" side="left" bordered class="bg-grey-2">
@@ -48,16 +43,16 @@
 import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import DashboardDialog from "components/DashboardDialog";
+import Toolbar from "components/Toolbar";
 import storySchema from "components/forms/story-form";
 import { mapGetters } from "vuex";
-import Toolbar from "components/Toolbar";
 
 export default {
   name: "AuthorLayout",
   components: {
     EssentialLink,
     DashboardDialog,
-    Toolbar,
+    Toolbar
   },
   setup() {
     const leftDrawerOpen = ref(false);
@@ -76,7 +71,7 @@ export default {
       const resp = this.$store.dispatch("model/createStory", this.getDialogModel);
       if (resp !== undefined && resp !== null) {
         resp.then(() => {
-          this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
+          this.$q.notify({ color: "positive", message: this.$t("succesfully_saved")});
           this.$store.commit("ui/hideDashboardDialog");
           this.getSecureStorage.removeItem("my-stories");
           this.$store.dispatch("model/fetchAuthorStories");

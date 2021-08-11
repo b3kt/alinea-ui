@@ -2,6 +2,17 @@
     width: 100%;
     max-width: 1280px !important;
 }
+.text-smaller{
+  font-size: smaller ;
+}
+.text-small{
+  font-size: small ;
+}
+.hyperlink{
+  text-decoration: none;
+  color: $primary;
+  font-weight: bold;
+}
 
 
 // @font-face
@@ -152,3 +163,11 @@ html, body{
 
 // // .mobile .q-dialog .q-dialog__inner
 //     // margin-top: 16px
+
+.hide-native-scrollbar {
+    scrollbar-width: none; /* Firefox 64 */
+    -ms-overflow-style: none; /* Internet Explorer 11 */
+    &::-webkit-scrollbar { /** WebKit */
+      display: none;
+    }
+  }

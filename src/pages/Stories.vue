@@ -1,19 +1,27 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mx-auto x-default-maxwidth">
     <Widget :title="$t('recommended')">
-      <div class="row q-col-gutter-md">
-        <div v-for="(story, idx) in getStories" v-bind:key="idx">
-          <BookItem :data="story" />
-        </div>
-      </div>
+      <q-virtual-scroll
+        :items="getStories"
+        virtual-scroll-horizontal
+        class="hide-native-scrollbar"
+      >
+        <template v-slot="{ item }">
+          <BookItem :data="item" mode="simple" :readonly="true" classes="q-mr-md" />
+        </template>
+      </q-virtual-scroll>
     </Widget>
 
     <Widget :title="$t('refined_search')">
-      <div class="row q-col-gutter-md">
-        <div v-for="(story, idx) in getStories" v-bind:key="idx">
-          <BookItem :data="story" />
-        </div>
-      </div>
+       <q-virtual-scroll
+        :items="getStories"
+        virtual-scroll-horizontal
+        class="hide-native-scrollbar"
+      >
+        <template v-slot="{ item }">
+          <BookItem :data="item" mode="simple" :readonly="true" classes="q-mr-md" />
+        </template>
+      </q-virtual-scroll>
     </Widget>
   </q-page>
 </template>

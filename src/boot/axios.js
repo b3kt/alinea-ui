@@ -25,6 +25,24 @@ axiosApiInstance.interceptors.request.use(
   }
 );
 
+const axiosUploadInstance = $axios.create({
+  baseURL: 'https://alinea.herokuapp.com:8443/imgs',
+});
+// axiosUploadInstance.interceptors.request.use(
+//   async (config) => {
+//     const token = await getToken();
+//     config.headers = {
+//       Authorization: `Bearer ${token}`,
+//     };
+//     return config;
+//   },
+//   (error) => {
+//     Promise.reject(error);
+//   }
+// );
+
+
+
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
@@ -37,4 +55,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { axiosApiInstance };
+export { axiosApiInstance, axiosUploadInstance };

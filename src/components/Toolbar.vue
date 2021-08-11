@@ -1,11 +1,7 @@
 <template>
   <div>
-    <q-toolbar class="bg-grey-3 shadow-1">
-      <!-- <q-btn flat round dense>
-        <q-icon name="menu" />
-      </q-btn> -->
-      <!-- <q-toolbar-title> Toolbar </q-toolbar-title> -->
-      <q-breadcrumbs separator="|">
+    <q-toolbar flat class="bg-grey-3" >
+      <q-breadcrumbs separator="|" separator-color="blue-grey-4" class="text-grey">
         <q-breadcrumbs-el icon="la la-home" />
         <q-breadcrumbs-el label="Components" />
         <q-breadcrumbs-el label="Breadcrumbs" />

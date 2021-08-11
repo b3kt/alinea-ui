@@ -6,12 +6,15 @@ import localforage from "localforage";
 import { mapGetters } from "vuex";
 import { openURL, Notify } from "quasar";
 import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
+import { axiosUploadInstance } from "boot/axios";
+// import FormData from 'form-data';
+// import fs from 'fs';
 
 Notify.setDefaults({
-  position: 'bottom-right',
+  position: "bottom-right",
   timeout: 3000,
-  textColor: 'white'
-})
+  textColor: "white",
+});
 
 const SECRET_KEY = sha256("asdo82GFDafsKAJSU628123918G12U~~");
 const secureStorage = new SecureStorage(localStorage, {
@@ -33,7 +36,12 @@ const secureStorage = new SecureStorage(localStorage, {
 
 const getContextHeaders = () => {
   const session = secureStorage.getItem("session");
-  if (session !== undefined && session !== null && session.token !== undefined && session.token !== null) {
+  if (
+    session !== undefined &&
+    session !== null &&
+    session.token !== undefined &&
+    session.token !== null
+  ) {
     return {
       headers: {
         Authorization: "Bearer " + session.token,
@@ -45,7 +53,6 @@ const getContextHeaders = () => {
 };
 
 export default boot(async ({ app, router }) => {
-
   const VueDynamicForms = createDynamicForms({});
   app.use(VueDynamicForms);
 
@@ -111,6 +118,9 @@ export default boot(async ({ app, router }) => {
           ? this.$keycloak.createRegisterUrl()
           : null;
       },
+      getCurrentRole() {
+        return this.$secureStorage.getItem("current_role");
+      },
       getUserUID() {
         const session = this.$secureStorage.getItem("session");
         return session !== undefined && session !== null
@@ -130,14 +140,17 @@ export default boot(async ({ app, router }) => {
       }),
     },
     methods: {
+      sanitize(value) {
+        return value.split("&state=")[0];
+      },
       isNil(value) {
         return value === undefined || value === null;
       },
       isNotEmpty(value) {
         return value !== undefined && value !== null && value.length > 0;
-      }, 
+      },
       onResetFormData() {
-        this.$store.commit('ui/resetFormModel');
+        this.$store.commit("ui/resetFormModel");
       },
       doLogout() {
         if (this.getLogoutUrl !== undefined && this.getLogoutUrl !== null) {
@@ -146,6 +159,42 @@ export default boot(async ({ app, router }) => {
         } else {
           alert("already logged out");
         }
+      },
+      doUpload(uploadObj) {
+        const FormData = require("form-data");
+        // const fs = require('fs');
+
+        console.log("--------------");
+        console.log(uploadObj);
+        console.log("--------------");
+
+        const reader = new FileReader();
+        const base64File = reader.readAsDataURL(uploadObj.file);
+
+        const formData = new FormData();
+        formData.append('id', uploadObj.id);
+        formData.append('name', uploadObj.name);
+        formData.append('field', uploadObj.field);
+        formData.append('file', uploadObj.file);
+
+        console.log(base64File);
+        const session = secureStorage.getItem("session");
+  
+        // console.log("--------------");
+        axiosUploadInstance
+          .post(
+            "/upload", formData,
+            {
+              headers: {
+                Authorization: "Bearer " + session.token,
+                "Content-Type": "multipart/form-data"
+              }
+            }
+          )
+          .then((response) => {
+            console.log(response);
+          });
+        // console.log("--------------");
       },
     },
     created() {

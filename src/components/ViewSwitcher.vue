@@ -2,8 +2,14 @@
   <div>
     <q-card square class="shadow-1">
       <q-card-section class="title" style="padding: 7px">
-        <q-btn color="primary" :label="$t('switch_view')" class="full-width" flat>
-          <q-menu fit cover anchor="top left" class="bg-light-blue-2">
+        <q-btn
+          color="primary"
+          icon="las la-exchange-alt"
+          :label="$t('switch_view')"
+          class="full-width"
+          flat
+        >
+          <q-menu fit cover anchor="top left" class="bg-accent">
             <q-list style="min-width: 100px">
               <q-item
                 clickable
@@ -34,8 +40,8 @@ export default {
   },
   methods: {
     onSwitchDashboard(mode) {
-      console.log(mode)
       if (mode !== undefined) {
+        this.$secureStorage.removeItem("menus");
         this.$store
           .dispatch("model/switchView", {
             role: mode,
@@ -43,9 +49,9 @@ export default {
           })
           .then((resp) => {
             this.$store.dispatch("keycloak/assignRole", resp);
-            this.$secureStorage.removeItem("menus");
             this.$store.dispatch("model/fetchMenus");
 
+            this.$router.push({ to: "/" });
             this.$router.go();
           });
       }

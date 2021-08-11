@@ -2,8 +2,20 @@ import { apolloClientInstance } from "boot/apollo";
 import { secureStorage, getContextHeaders } from "boot/app";
 import { fetchMenusQuery } from "../../apollo/query/role_menus";
 import { fetchSelfProfileQuery } from "../../apollo/query/author_profile";
-import { fetchStoriesPublicQuery, fetchMyStoriesQuery, findStoryByUidQuery } from "../../apollo/query/stories";
-import { createStoryMutation, updateStoryMutation } from "../../apollo/mutation/save_story";
+import { fetchUserAddressQuery, fetchUserBankQuery, fetchUserLibraryQuery } from "../../apollo/query/users";
+import {
+  fetchStoriesPublicQuery,
+  fetchMyStoriesQuery,
+  findStoryByUidQuery,
+  fetchTopStoriesQuery,
+  fetchNewStoriesQuery,
+  fetchSaleStoriesQuery,
+} from "../../apollo/query/stories";
+import {
+  createStoryMutation,
+  updateStoryMutation,
+  createChapterMutation,
+} from "../../apollo/mutation/save_story";
 
 const session = secureStorage.getItem("session");
 
@@ -18,6 +30,7 @@ export function fetchMenus(context) {
           fetchMenusQuery(
             {
               role: current_role,
+              childrole: current_role.toUpperCase(),
             },
             contextHeaders
           )
@@ -28,6 +41,7 @@ export function fetchMenus(context) {
             response.data.menus !== null
           ) {
             context.commit("setMenus", response.data.menus);
+            secureStorage.setItem("menus", response.data.menus);
           }
         });
     }
@@ -71,8 +85,32 @@ export function createStory(context, data) {
     return apolloClientInstance
       .mutate(createStoryMutation(data, contextHeaders))
       .then((response) => {
-        if (response.data.insert_stories !== undefined && response.data.insert_stories !== null) {
+        if (
+          response.data.insert_stories !== undefined &&
+          response.data.insert_stories !== null
+        ) {
           console.log(response.data.insert_stories);
+        }
+      });
+  }
+}
+
+export function createChapter(context, data) {
+  const current_role = secureStorage.getItem("current_role");
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null &&
+    current_role === "author"
+  ) {
+    return apolloClientInstance
+      .mutate(createChapterMutation(data, contextHeaders))
+      .then((response) => {
+        if (
+          response.data.insert_chapters !== undefined &&
+          response.data.insert_chapters !== null
+        ) {
+          console.log(response.data.insert_chapters);
         }
       });
   }
@@ -86,11 +124,12 @@ export function updateStory(context, data) {
     contextHeaders !== null &&
     current_role === "author"
   ) {
-    return apolloClientInstance
-      .mutate(updateStoryMutation(data, contextHeaders))
-      .then((response) => {
-        if (response.data.update_stories !== undefined && response.data.update_stories !== null) {
-          console.log(response.data.update_stories);
+    const mutateStory = apolloClientInstance
+      .mutate(updateStoryMutation(data, contextHeaders));
+    return mutateStory.then((response) => {
+        if (response.data.update_stories !== undefined &&
+          response.data.update_stories !== null) {
+          console.log(data);
         }
       });
   }
@@ -100,9 +139,7 @@ export function fetchStories(context) {
   const stories = secureStorage.getItem("stories");
   if (stories === null || stories === undefined) {
     return apolloClientInstance
-      .query(
-        fetchStoriesPublicQuery()
-      )
+      .query(fetchStoriesPublicQuery())
       .then((response) => {
         if (
           response.data.stories !== undefined &&
@@ -120,9 +157,7 @@ export function fetchAuthorStories(context) {
   const stories = secureStorage.getItem("my-stories");
   if (stories === null || stories === undefined) {
     return apolloClientInstance
-      .query(
-        fetchMyStoriesQuery(getContextHeaders())
-      )
+      .query(fetchMyStoriesQuery(getContextHeaders()))
       .then((response) => {
         if (
           response.data.stories !== undefined &&
@@ -149,12 +184,15 @@ export function switchView(context, param) {
 }
 
 export function findStoryByUid(context, uid) {
+  apolloClientInstance.localState.cache.reset();
   return apolloClientInstance
     .query(
-      findStoryByUidQuery({
-        uid: uid
-      },
-      getContextHeaders())
+      findStoryByUidQuery(
+        {
+          uid: uid,
+        },
+        getContextHeaders()
+      )
     )
     .then((response) => {
       if (
@@ -165,5 +203,78 @@ export function findStoryByUid(context, uid) {
         context.commit("setStory", response.data.stories[0]);
       }
     });
-  
+}
+
+export function fetchStoriesByCriteria(context, criteria) {
+  let criteriaQry = null;
+  if (criteria === "newStories") {
+    criteriaQry = fetchNewStoriesQuery();
+  } else if (criteria === "topStories") {
+    criteriaQry = fetchTopStoriesQuery();
+  } else if (criteria === "saleStories") {
+    criteriaQry = fetchSaleStoriesQuery();
+  }
+
+  if (criteriaQry !== null) {
+    return apolloClientInstance.query(criteriaQry).then((response) => {
+      if (
+        response.data.stories !== undefined &&
+        response.data.stories !== null
+      ) {
+        context.commit("setFeedsObject", {
+          name: criteria,
+          value: response.data.stories,
+        });
+      }
+    });
+  }
+}
+
+export function fetchUserAddress(context) {
+  const contextHeaders = getContextHeaders();
+  if (contextHeaders !== undefined && contextHeaders !== null) {
+    return apolloClientInstance
+      .query(fetchUserAddressQuery(contextHeaders))
+      .then((response) => {
+        console.log(response)
+        if (
+          response.data.user_address !== undefined &&
+          response.data.user_address !== null
+        ) {
+          context.commit("setAddress", response.data.user_address);
+        }
+      });
+  }
+}
+
+export function fetchUserBank(context) {
+  const contextHeaders = getContextHeaders();
+  if (contextHeaders !== undefined && contextHeaders !== null) {
+    return apolloClientInstance
+      .query(fetchUserBankQuery(contextHeaders))
+      .then((response) => {
+        if (
+          response.data.user_banks !== undefined &&
+          response.data.user_banks !== null
+        ) {
+          context.commit("setBanks", response.data.user_banks);
+        }
+      });
+  }
+}
+
+export function fetchUserLibrary(context) {
+  const contextHeaders = getContextHeaders();
+  if (contextHeaders !== undefined && contextHeaders !== null) {
+    return apolloClientInstance
+      .query(fetchUserLibraryQuery(contextHeaders))
+      .then((response) => {
+        if (
+          response.data.user_libraries !== undefined &&
+          response.data.user_libraries !== null
+        ) {
+          context.commit("setLibraries", response.data.user_libraries);
+        }
+      });
+  }
 }

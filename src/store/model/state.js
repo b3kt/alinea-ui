@@ -1,13 +1,21 @@
 export default function () {
   return {
     profile: null,
-    user: {},
+    user: {
+      profile: {},
+      address: [],
+      banks: [],
+      libraries: []
+    },
     menus: [],
     detail: {
       story: {},
     },
     feeds : {
       stories: [],
+      topStories: [],
+      newStories: [],
+      saleStories: [],
     }
   }
 }
