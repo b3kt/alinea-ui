@@ -9,6 +9,8 @@ export function fetchSelfProfileQuery(contextHeaders) {
           bio
           address
           email
+          phone
+          website
         }
       }
     `,

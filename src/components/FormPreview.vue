@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card flat bordered>
+    <q-card flat>
       <q-card-section class="absolute-right q-pa-sm">
         <q-btn
           class="q-ml-sm z-top"
@@ -20,7 +20,7 @@
         ></q-btn>
       </q-card-section>
       <q-card-section horizontal v-for="(item, idx) in getDataArray" :key="idx" class="">
-        <q-card-section style="width: 160px" class="text-weight-light">
+        <q-card-section style="width: 160px" class="text-weight-light col-1">
           {{ $t(item[0]) }}
         </q-card-section>
         <q-card-section>
@@ -42,6 +42,15 @@ export default {
     enableDelete: {
       type: Boolean,
       default: false
+    },
+    onEdit: {
+      type: Function,
+      default: () => {
+        console.log("onEdit tiggered")
+      }
+    },
+    onDelete: {
+      type: Function,
     }
   },
   setup() {
@@ -49,7 +58,7 @@ export default {
   },
   methods: {
     onEditEvent() {
-      alert("asdasd123");
+      this.onEdit();
     },
     onDeleteEvent() {
       this.$q.dialog({
@@ -59,10 +68,7 @@ export default {
         persistent: true,
       })
         .onOk(() => {
-          // console.log('>>>> OK')
-        })
-        .onOk(() => {
-          // console.log('>>>> second OK catcher')
+          this.onDelete(this.data);
         })
         .onCancel(() => {
           // console.log('>>>> Cancel')
@@ -78,7 +84,7 @@ export default {
   },
   computed: {
     getDataArray() {
-      return Object.entries(this.data);
+      return this.data !== undefined && this.data !== null ? Object.entries(this.data) : [];
     },
   },
 };

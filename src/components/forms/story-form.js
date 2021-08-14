@@ -31,7 +31,7 @@ const storySchema = {
     config: {
       type: "file",
     },
-    value: null
+    value: null,
   },
   // work: {
   //   component: SchemaForm,

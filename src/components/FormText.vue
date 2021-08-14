@@ -2,7 +2,7 @@
   <FormField :label="label" :required="required">
     <q-input outlined dense
       :name="name"
-      :type="config.type"
+      :type="type"
       v-model="modelValue"
       :required="required"
       :id="uuid"
@@ -32,10 +32,10 @@ export default {
       type: String,
       required: true
     },
-    config: {
-      type: Object,
-      default: () => ({ type: "text" })
-    },
+    // config: {
+    //   type: Object,
+    //   default: () => ({ type: "text" })
+    // },
     readOnly: {
       type: Boolean,
       default: false

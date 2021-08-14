@@ -127,6 +127,7 @@ export function findStoryByUidQuery(vars, contextHeaders) {
           cover_img {
             thumbnail_url
             url
+            file_uuid
           }
           chapters {
             title

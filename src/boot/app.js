@@ -80,10 +80,8 @@ export default boot(async ({ app, router }) => {
       return {
         config: {
           appName: "Alinea",
-          dmsUploadURL: "https://alineadms.pagekite.me/upload",
-          dmsDeleteURL: "https://alineadms.pagekite.me/",
           defaultImageURL:
-            "https://via.placeholder.com/200x300/00a89c/ffffff?text=No%20Cover",
+            "https://via.placeholder.com/200x300/00a89c/ffffff?text=alinea",
         },
         dialogDashboard: {
           title: "test",
@@ -162,26 +160,14 @@ export default boot(async ({ app, router }) => {
       },
       doUpload(uploadObj) {
         const FormData = require("form-data");
-        // const fs = require('fs');
-
-        console.log("--------------");
-        console.log(uploadObj);
-        console.log("--------------");
-
-        const reader = new FileReader();
-        const base64File = reader.readAsDataURL(uploadObj.file);
-
+        const session = secureStorage.getItem("session");        
         const formData = new FormData();
         formData.append('id', uploadObj.id);
         formData.append('name', uploadObj.name);
         formData.append('field', uploadObj.field);
         formData.append('file', uploadObj.file);
 
-        console.log(base64File);
-        const session = secureStorage.getItem("session");
-  
-        // console.log("--------------");
-        axiosUploadInstance
+        return axiosUploadInstance
           .post(
             "/upload", formData,
             {
@@ -190,11 +176,7 @@ export default boot(async ({ app, router }) => {
                 "Content-Type": "multipart/form-data"
               }
             }
-          )
-          .then((response) => {
-            console.log(response);
-          });
-        // console.log("--------------");
+          );
       },
     },
     created() {

@@ -61,6 +61,7 @@ export default {
       if (!this.isNil(this.getStory)) {
         storySchema.title.value = this.getStory.title;
         storySchema.intro.value = this.getStory.description;
+        storySchema.cover.value = this.getStory.cover_img[0];
       }
     },
     getUID() {
@@ -83,8 +84,6 @@ export default {
             this.$store.commit("ui/hideDashboardDialog");
             this.$store.commit("model/setStory", null);
             this.initStory();
-            // this.getSecureStorage.removeItem("my-stories");
-            // this.$store.dispatch("model/fetchAuthorStories");
           });
         }
       }
@@ -95,6 +94,10 @@ export default {
           name: 'story',
           field: 'cover',
           id: this.getStory.story_uid
+        }).then(() => {
+          this.$store.commit("ui/hideDashboardDialog");
+          this.$store.commit("model/setStory", null);
+          this.initStory();
         });
       }
     },
@@ -151,7 +154,6 @@ export default {
           desc: this.getDialogModel.intro,
           uid: this.sanitize(this.$route.params.story_uid),
         };
-        console.log(vars);
         const resp = this.$store.dispatch("model/createChapter", vars);
         if (resp !== undefined && resp !== null) {
           resp.then(() => {

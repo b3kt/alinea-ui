@@ -11,9 +11,9 @@
       <q-card-section horizontal>
         <q-card-section class="col" v-for="(item, idx) in quickmenu" :key="idx">
           <q-card flat bordered class="q-btn full-width q-btn--flat">
-            <q-card-section class="text-center">
+            <q-card-section class="text-center text-grey">
               <div><q-icon size="xl" :name="item.icon" /></div>
-              <div>{{ $t(item.label) }}</div>
+              <div class="text-weight-light" >{{ $t(item.label) }}</div>
             </q-card-section>
           </q-card>
         </q-card-section>
@@ -28,11 +28,11 @@ export default {
   setup() {
     return {
       quickmenu: [
-        { id: "library", label: "library", icon: "la la-home" },
-        { id: "bookmark", label: "bookmark", icon: "la la-home" },
-        { id: "rent", label: "rent", icon: "la la-home" },
-        { id: "point", label: "point", icon: "la la-home" },
-        { id: "mission", label: "mission", icon: "la la-home" },
+        { id: "library", label: "library", icon: "la la-book" },
+        { id: "bookmark", label: "bookmark", icon: "la la-bookmark" },
+        { id: "rent", label: "rent", icon: "la la-clock" },
+        { id: "point", label: "point", icon: "la la-coins" },
+        { id: "mission", label: "mission", icon: "la la-check" },
       ],
     };
   },

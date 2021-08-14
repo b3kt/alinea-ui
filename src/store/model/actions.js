@@ -15,7 +15,14 @@ import {
   createStoryMutation,
   updateStoryMutation,
   createChapterMutation,
+  deleteImageMutation
 } from "../../apollo/mutation/save_story";
+import {
+  updateProfileMutation,
+  deleteAddressMutation
+} from "../../apollo/mutation/users";
+
+
 
 const session = secureStorage.getItem("session");
 
@@ -51,14 +58,14 @@ export function fetchMenus(context) {
 }
 
 export function fetchProfile(context) {
-  const profile = secureStorage.getItem("profile");
-  if (profile === null || profile === undefined) {
+  // const profile = secureStorage.getItem("profile");
+  // if (profile === null || profile === undefined) {
     const contextHeaders = getContextHeaders();
     if (contextHeaders !== undefined && contextHeaders !== null) {
+      apolloClientInstance.localState.cache.reset();
       return apolloClientInstance
         .query(fetchSelfProfileQuery(contextHeaders))
         .then((response) => {
-          console.log(response);
           if (
             response.data.user_profiles !== undefined &&
             response.data.user_profiles !== null &&
@@ -69,9 +76,9 @@ export function fetchProfile(context) {
           }
         });
     }
-  } else {
-    context.commit("setProfile", profile);
-  }
+  // } else {
+  //   context.commit("setProfile", profile);
+  // }
 }
 
 export function createStory(context, data) {
@@ -129,6 +136,23 @@ export function updateStory(context, data) {
     return mutateStory.then((response) => {
         if (response.data.update_stories !== undefined &&
           response.data.update_stories !== null) {
+          console.log(data);
+        }
+      });
+  }
+}
+
+export function updateProfile(context, data) {
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    const mutateProfile = apolloClientInstance
+      .mutate(updateProfileMutation(data, contextHeaders));
+    return mutateProfile.then((response) => {
+        if (response.data.update_user_profiles !== undefined &&
+          response.data.update_user_profiles !== null) {
           console.log(data);
         }
       });
@@ -274,6 +298,42 @@ export function fetchUserLibrary(context) {
           response.data.user_libraries !== null
         ) {
           context.commit("setLibraries", response.data.user_libraries);
+        }
+      });
+  }
+}
+
+export function deleteImage(context, data) {
+  const current_role = secureStorage.getItem("current_role");
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null &&
+    current_role === "author"
+  ) {
+    const mutateStory = apolloClientInstance
+      .mutate(deleteImageMutation(data, contextHeaders));
+    return mutateStory.then((response) => {
+        if (response.data.update_stories !== undefined &&
+          response.data.update_stories !== null) {
+          console.log(data);
+        }
+      });
+  }
+}
+
+export function deleteAddress(context, data) {
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    const mutateStory = apolloClientInstance
+      .mutate(deleteAddressMutation(data, contextHeaders));
+    return mutateStory.then((response) => {
+        if (response.data.delete_user_address_by_pk !== undefined &&
+          response.data.delete_user_address_by_pk !== null) {
+          console.log(data);
         }
       });
   }

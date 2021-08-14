@@ -1,6 +1,7 @@
 <template>
   <FormField :label="label" :required="required">
     <q-file
+      v-if="isNil(value)"
       :name="name"
       :type="config.type"
       v-model="modelValue"
@@ -21,17 +22,29 @@
         <q-icon name="attach_file" />
       </template>
     </q-file>
+    <q-card v-else style="width: 120px" flat bordered>
+      <q-img :src="value.thumbnail_url" :ratio="2 / 3" />
+      <q-card-section class="q-pa-none text-right">
+        <q-btn
+          flat
+          class="full-width"
+          icon="la la-trash"
+          @click.stop="onDeleteImageEvent()"
+        />
+      </q-card-section>
+    </q-card>
     <p v-show="validation.errorMessage" v-text="validation.errorMessage"></p>
   </FormField>
 </template>
 
 <script>
+import { axiosUploadInstance } from "boot/axios";
 import FormField from "components/FormField";
 export default {
   name: "FormFile",
   components: { FormField },
   props: {
-    // modelValue: { required: true },
+    value: { required: true },
     name: {
       type: String,
       required: true,
@@ -84,6 +97,70 @@ export default {
     // },
   },
   methods: {
+    onDeleteImage() {
+      const session = this.$secureStorage.getItem("session");
+      const fileUUID = this.value.file_uuid;
+      return axiosUploadInstance.delete("/delete/" + fileUUID, {
+        headers: {
+          Authorization: "Bearer " + session.token,
+        },
+      });
+    },
+    onDeleteImageEvent() {
+      this.$q
+        .dialog({
+          title: this.$t("delete_confirm"),
+          message: this.$t("delete_confirm_msg"),
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          this.onDeleteImage().then((response) => {
+            if (
+              response !== undefined &&
+              response !== null &&
+              response.data !== undefined &&
+              response.data !== null
+            ) {
+              this.$store
+                .dispatch("model/deleteImage", {
+                  uuid: this.value.file_uuid,
+                })
+                .then((resp) => {
+                  this.$q.notify({
+                    color: "positive",
+                    message: this.$t("succesfully_deleted"),
+                  });
+                  this.$store.commit("ui/setFormData", {
+                    name: this.name,
+                    value: null,
+                  });
+                });
+
+              // this.$q.notify({
+              //   color: response.data.code === 200 ? "positive" : "negative",
+              //   message:
+              //     response.data.code === 200
+              //       ? this.$t("succesfully_deleted")
+              //       : this.$t("unable_to_delete"),
+              // });
+
+              // if (response.data.code === 200) {
+              //   this.$store.commit("ui/setFormData", {
+              //     name: this.name,
+              //     value: null,
+              //   });
+              // }
+            }
+          });
+        })
+        .onCancel(() => {
+          // console.log('>>>> Cancel')
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
+    },
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();

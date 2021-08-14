@@ -46,3 +46,17 @@ export function createChapterMutation(vars, contextHeaders) {
     context: contextHeaders,
   };
 }
+
+export function deleteImageMutation(vars, contextHeaders) {
+  return {
+    mutation: gql`
+      mutation deleteFile($uuid: String!) {
+        delete_system_files(where: { file_uuid: { _eq: $uuid } }) {
+          affected_rows
+        }
+      }
+    `,
+    variables: vars,
+    context: contextHeaders,
+  };
+}

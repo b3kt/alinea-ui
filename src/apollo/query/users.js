@@ -5,6 +5,7 @@ export function fetchUserAddressQuery(contextHeaders) {
     query: gql`
       query fetchUserAddress {
         user_address {
+          id
           address
           city
           state

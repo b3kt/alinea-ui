@@ -2,7 +2,7 @@
   <div>
     <q-toolbar flat class="bg-grey-3" >
       <q-breadcrumbs separator="|" separator-color="blue-grey-4" class="text-grey">
-        <q-breadcrumbs-el icon="la la-home" />
+        <q-breadcrumbs-el icon="la la-home" @click="$router.push('/')"/>
         <q-breadcrumbs-el label="Components" />
         <q-breadcrumbs-el label="Breadcrumbs" />
       </q-breadcrumbs>

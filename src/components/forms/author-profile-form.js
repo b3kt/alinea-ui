@@ -1,42 +1,42 @@
 import { shallowRef, ref } from "vue";
 import FormText from "components/FormText.vue";
-import FormFile from "components/FormFile.vue";
-import FormSelect from "components/FormSelect.vue";
 import { SchemaForm, useSchemaForm } from "formvuelate";
+
+const formText = shallowRef(FormText);
 
 const authorProfileSchema = {
   name: {
-    component: FormText,
+    component: formText,
     label: "Name",
     name: "name",
     required: true,
-    config: {
-      type: "text",
-    },
+    type: "text",
   },
   bio: {
-    component: FormText,
+    component: formText,
     label: "Bio",
     name: "bio",
-    config: {
-      type: "textarea",
-    },
+    type: "textarea",
   },
-  cover: {
-    component: FormFile,
-    label: "Cover",
-    name: "cover",
-    config: {
-      type: "file",
-    },
+  phone: {
+    component: formText,
+    label: "Phone",
+    name: "phone",
+    type: "phone",
   },
-  avatar: {
-    component: FormFile,
-    label: "Avatar",
-    name: "avatar",
-    config: {
-      type: "file",
-    },
+  email: {
+    component: formText,
+    label: "Email",
+    name: "email",
+    type: "email",
+    value: null,
+  },
+  website: {
+    component: formText,
+    label: "Website",
+    name: "website",
+    type: "text",
+    value: null,
   },
 };
 

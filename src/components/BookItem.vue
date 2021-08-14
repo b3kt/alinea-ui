@@ -1,28 +1,47 @@
 <template>
-  <div :class="'row '+ classes">
-    <q-card class="book-item bg-transparent" v-if="!isNil(data)" flat>
-      <q-img
-        :src="getThumbnail"
-        :ratio="2 / 3"
-        class="book-item-img rounded-img"
-        clickable
-        v-ripple
-        @click="onClickEvent()"
-      />
+  <div :class="'row' + classes">
+    <q-card class="book-item bg-transparent q-my-xs q-mx-sm" v-if="!isNil(data)" flat>
+      <div class="shadow-1">
+        <q-img
+          :src="getThumbnail"
+          :ratio="2 / 3"
+          class="book-item-img rounded-img shadow-1"
+          clickable
+          v-ripple
+          @click="onClickEvent()"
+        />
+      </div>
       <q-card-section class="q-pa-sm" v-if="mode === 'simple'">
         <div class="row no-wrap items-center">
           <div class="col ellipsis text-weight-light">{{ getTitle }}</div>
         </div>
         <div class="row no-wrap items-center">
-          <div class="col ellipsis text-weight-light text-smaller text-primary">{{ getAuthor }}</div>
+          <div class="col ellipsis text-weight-light text-smaller text-primary">
+            {{ getAuthor }}
+          </div>
         </div>
       </q-card-section>
     </q-card>
 
-    <q-card flat v-if="mode === 'detail'" class="bg-transparent col fit" style="width: 360px !important">
-      <q-card-section class="text-capitalize text-h6 ellipsis title q-py-xs"> {{getTitle}} </q-card-section>
-      <q-card-section class="col ellipsis text-weight-light text-small q-py-xs text-primary">{{ getAuthor }}</q-card-section>
-      <q-card-section class="ellipsis-2-lines text-weight-light q-pb-sm" style="height:60px"> {{getDescription}} </q-card-section>
+    <q-card
+      flat
+      v-if="mode === 'detail'"
+      class="bg-transparent col fit"
+      style="width: 360px !important"
+    >
+      <q-card-section class="text-capitalize text-h6 ellipsis title q-py-xs">
+        {{ getTitle }}
+      </q-card-section>
+      <q-card-section
+        class="col ellipsis text-weight-light text-small q-py-xs text-primary"
+        >{{ getAuthor }}</q-card-section
+      >
+      <q-card-section
+        class="ellipsis-2-lines text-weight-light q-pb-sm"
+        style="height: 60px"
+      >
+        {{ getDescription }}
+      </q-card-section>
       <q-card-section v-if="isAuthenticated && !readonly">
         <q-btn
           dense
@@ -41,7 +60,14 @@
           @click="onDeleteEvent()"
         />
         <div class="q-btn q-btn--dense q-btn--outline q-btn--rectangle q-mr-sm">
-          <q-checkbox color="positive" dense class="q-px-sm" v-model="published" :label="$t(published ? 'published':'private')" @click="published ? onUnpublishEvent() : onPublishEvent()"/>
+          <q-checkbox
+            color="positive"
+            dense
+            class="q-px-sm"
+            v-model="published"
+            :label="$t(published ? 'published' : 'private')"
+            @click="published ? onUnpublishEvent() : onPublishEvent()"
+          />
         </div>
       </q-card-section>
       <q-card-section v-else>
@@ -64,7 +90,7 @@ export default {
   props: {
     readonly: {
       type: Boolean,
-      default: false
+      default: false,
     },
     data: {
       type: Object,
@@ -73,15 +99,15 @@ export default {
     col: {
       type: Number,
       required: false,
-      default: 12
+      default: 12,
     },
     classes: {
       type: String,
       required: false,
-      default: ""
+      default: "",
     },
     to: {
-      type: String
+      type: String,
     },
     mode: {
       type: String,
@@ -117,7 +143,7 @@ export default {
       default: () => {
         console.log("add chapter");
       },
-    }
+    },
   },
   data() {
     return {
@@ -142,16 +168,19 @@ export default {
     },
     onAddChapterEvent() {
       this.onAddChapter();
-    }
+    },
   },
   computed: {
     getTitle() {
-      return this.data !== undefined && this.data !== null ? this.data.title : '';
+      return this.data !== undefined && this.data !== null ? this.data.title : "";
     },
     getAuthor() {
-      return this.data !== undefined && this.data !== null 
-        && this.data.author !== undefined && this.data.author !== null 
-         ? this.data.author.name : null;
+      return this.data !== undefined &&
+        this.data !== null &&
+        this.data.author !== undefined &&
+        this.data.author !== null
+        ? this.data.author.name
+        : null;
     },
     getDescription() {
       return this.data !== undefined && this.data !== null ? this.data.description : null;

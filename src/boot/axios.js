@@ -26,7 +26,7 @@ axiosApiInstance.interceptors.request.use(
 );
 
 const axiosUploadInstance = $axios.create({
-  baseURL: 'https://alinea.herokuapp.com:8443/imgs',
+  baseURL: 'https://alinea-imgs.herokuapp.com/imgs',
 });
 // axiosUploadInstance.interceptors.request.use(
 //   async (config) => {
