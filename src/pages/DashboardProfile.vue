@@ -125,7 +125,6 @@ export default {
   computed: {
     ...mapGetters({
       getProfile: "model/getProfile",
-      getDialogForm: "ui/getDialogForm",
     }),
     getDialogModel() {
       return this.getDialogForm.model;

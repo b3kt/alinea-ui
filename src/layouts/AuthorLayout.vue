@@ -35,8 +35,6 @@
       <EssentialLink />
     </q-drawer>
 
-    <DashboardDialog />
-
     <q-page-container>
       <!-- This is where pages get injected -->
       <router-view />
@@ -47,7 +45,6 @@
 <script>
 import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
-import DashboardDialog from "components/DashboardDialog";
 import storySchema from "components/forms/story-form";
 import { mapGetters } from "vuex";
 import Toolbar from "components/Toolbar";
@@ -56,7 +53,6 @@ export default {
   name: "AuthorLayout",
   components: {
     EssentialLink,
-    DashboardDialog,
     Toolbar,
   },
   setup() {

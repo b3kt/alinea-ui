@@ -3,8 +3,7 @@ import FormText from "components/FormText.vue";
 import { SchemaForm, useSchemaForm } from "formvuelate";
 
 const formText = shallowRef(FormText);
-
-const authorProfileSchema = {
+const profileSchema = {
   name: {
     component: formText,
     label: "Name",
@@ -40,4 +39,4 @@ const authorProfileSchema = {
   },
 };
 
-export default authorProfileSchema ;
+export default profileSchema ;

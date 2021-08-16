@@ -1,8 +1,9 @@
 <template>
   <div>
-    <q-card square class="shadow-1">
+    <q-card square class="shadow-1" style="height:50px">
       <q-card-section class="title" style="padding: 7px">
         <q-btn
+          v-if="isProfileCompleted"
           color="primary"
           icon="las la-exchange-alt"
           :label="$t('switch_view')"

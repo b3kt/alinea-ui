@@ -1,6 +1,6 @@
 export default function () {
   return {
-    profile: null,
+    // profile: null,
     user: {
       profile: {},
       address: [],

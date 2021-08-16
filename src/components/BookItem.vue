@@ -13,7 +13,7 @@
       </div>
       <q-card-section class="q-pa-sm" v-if="mode === 'simple'">
         <div class="row no-wrap items-center">
-          <div class="col ellipsis text-weight-light">{{ getTitle }}</div>
+          <div class="col ellipsis text-weight-light text-capitalize">{{ getTitle }}</div>
         </div>
         <div class="row no-wrap items-center">
           <div class="col ellipsis text-weight-light text-smaller text-primary">

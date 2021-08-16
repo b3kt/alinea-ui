@@ -5,7 +5,7 @@ import { sha256 } from "js-sha256";
 import localforage from "localforage";
 import { mapGetters } from "vuex";
 import { openURL, Notify } from "quasar";
-import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
+// import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
 import { axiosUploadInstance } from "boot/axios";
 // import FormData from 'form-data';
 // import fs from 'fs';
@@ -53,8 +53,8 @@ const getContextHeaders = () => {
 };
 
 export default boot(async ({ app, router }) => {
-  const VueDynamicForms = createDynamicForms({});
-  app.use(VueDynamicForms);
+  // const VueDynamicForms = createDynamicForms({});
+  // app.use(VueDynamicForms);
 
   localforage.config({
     driver: localforage.INDEXEDDB, // Force WebSQL; same as using setDriver()
@@ -135,7 +135,15 @@ export default boot(async ({ app, router }) => {
         requireLogin: "ui/getRequireLogin",
         isAuthenticated: "keycloak/isAuthenticated",
         myProfile: "model/getProfile",
+        getDialogForm: "ui/getDialogForm",
+        getDialogModel: "ui/getDialogModel",
       }),
+      isProfileCompleted() {
+        return (
+          this.myProfile !== undefined &&
+          this.myProfile !== null
+        );
+      },
     },
     methods: {
       sanitize(value) {

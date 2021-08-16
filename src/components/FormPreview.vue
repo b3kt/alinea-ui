@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card flat>
+    <q-card flat bordered>
       <q-card-section class="absolute-right q-pa-sm">
         <q-btn
           class="q-ml-sm z-top"
@@ -45,7 +45,7 @@ export default {
     },
     onEdit: {
       type: Function,
-      default: () => {
+      default: (item) => {
         console.log("onEdit tiggered")
       }
     },
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     onEditEvent() {
-      this.onEdit();
+      this.onEdit(this.data);
     },
     onDeleteEvent() {
       this.$q.dialog({

@@ -19,7 +19,11 @@ import {
 } from "../../apollo/mutation/save_story";
 import {
   updateProfileMutation,
-  deleteAddressMutation
+  updateAddressMutation,
+  deleteAddressMutation,
+  createProfileMutation,
+  createAddressMutation,
+  enableUserMutation
 } from "../../apollo/mutation/users";
 
 
@@ -153,6 +157,68 @@ export function updateProfile(context, data) {
     return mutateProfile.then((response) => {
         if (response.data.update_user_profiles !== undefined &&
           response.data.update_user_profiles !== null) {
+          console.log(data);
+        }
+      });
+  }
+}
+
+export function updateAddress(context, data) {
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    const mutateProfile = apolloClientInstance
+      .mutate(updateAddressMutation(data, contextHeaders));
+    return mutateProfile.then((response) => {
+        if (response.data.update_user_address !== undefined &&
+          response.data.update_user_address !== null) {
+          console.log(data);
+        }
+      });
+  }
+}
+
+export function createProfile(context, data) {
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    const mutateRole = apolloClientInstance
+    .mutate(enableUserMutation(contextHeaders));
+      mutateRole.then((response) => {
+      if (response.data.insert_user_roles !== undefined &&
+        response.data.insert_user_roles !== null) {
+        console.log(data);
+      }
+    });
+
+    const mutateProfile = apolloClientInstance
+      .mutate(createProfileMutation(data, contextHeaders));
+    return mutateProfile.then((response) => {
+        if (response.data.update_user_profiles !== undefined &&
+          response.data.update_user_profiles !== null) {
+          console.log(data);
+        }
+      });
+  }
+}
+
+export function createAddress(context, data) {
+  console.log(data);
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    const mutateAddress = apolloClientInstance
+      .mutate(createAddressMutation(data, contextHeaders));
+    return mutateAddress.then((response) => {
+      console.log(response);
+        if (response.data.insert_user_address !== undefined &&
+          response.data.insert_user_address !== null) {
           console.log(data);
         }
       });

@@ -1,9 +1,11 @@
 <template>
   <q-page>
-    <Carousel class="q-ma-sm q-mx-auto x-default-maxwidth" />
+    <section id="banner" class="q-px-sm">
+      <Carousel class="q-ma-sm q-mx-auto x-default-maxwidth" />
+    </section>
 
-    <section id="quicklink" class="q-mx-auto x-default-maxwidth" v-if="isAuthenticated">
-      <Quicklink/>
+    <section id="quicklink" class="q-mx-auto x-default-maxwidth" v-if="isAuthenticated && isProfileCompleted">
+      <Quicklink />
     </section>
 
     <section id="stories" class="q-mx-auto x-default-maxwidth">
@@ -235,6 +237,7 @@ export default defineComponent({
     this.$store.dispatch("model/fetchStoriesByCriteria", "newStories");
     this.$store.dispatch("model/fetchStoriesByCriteria", "saleStories");
   },
+  methods: {},
   computed: {
     isAuthenticated() {
       return this.$keycloak !== undefined && this.$keycloak !== null

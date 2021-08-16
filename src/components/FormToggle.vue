@@ -1,13 +1,13 @@
 <template>
   <FormField :label="label" :required="required">
-    <q-input outlined dense
+    <q-checkbox outlined dense
       :name="name"
-      :type="type"
       v-model="modelValue"
+      :label="label"
       :required="required"
       :id="uuid"
       :disabled="readOnly"
-      @blur="update($event)"
+      @update="update($event)"
     />
     <p v-show="validation.errorMessage" v-text="validation.errorMessage"></p>
   </FormField>
@@ -48,10 +48,10 @@ export default {
       type: Object,
       default: () => ({})
     },
-    type: {
-      type: String,
-      default: "text"
-    },
+    // type: {
+    //   type: String,
+    //   default: "text"
+    // },
     validations: {
       type: Object,
       default: () => ({})
@@ -60,7 +60,7 @@ export default {
   data() {
     const val = this.value;
     return {
-      modelValue: val
+      modelValue: this.value !== undefined && this.value !== null ? this.value : false
     }
   },
   computed: {

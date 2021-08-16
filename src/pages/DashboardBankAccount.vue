@@ -5,7 +5,7 @@
         <Widget :title="$t('bank_account')" :action="onAddBank" :actionLabel="$t('add_bank_account')">
           <div v-for="(item,idx) in getBank" :key="idx" class="row q-col-gutter-md">
             <div class="col q-mb-md">
-              <FormPreview :data="item" :enableDelete="true"/>
+              <FormPreview :data="item" :enableDelete="true" :onDelete="onDeleteBank" :onEdit="onEditBank"/>
             </div>
           </div>
         </Widget>
@@ -25,6 +25,14 @@ export default {
     onAddBank() {
       this.$store.dispatch("model/fetchUserBank")
     },
+    onDeleteBank(item){
+      console.log(item)
+      alert('qweqwe');
+    },
+    onEditBank(item){
+      console.log(item)
+      alert('qweq1we');
+    }
   },
   mounted() {
     this.$store.dispatch("model/fetchUserBank")
