@@ -1,8 +1,10 @@
 import { shallowRef, ref } from "vue";
-import FormText from "components/FormText.vue";
-import { SchemaForm, useSchemaForm } from "formvuelate";
+import FormText from "components/FormText";
+import FormFile from "components/FormFile";
+// import { SchemaForm, useSchemaForm } from "formvuelate";
 
 const formText = shallowRef(FormText);
+const formFile = shallowRef(FormFile);
 
 const authorProfileSchema = {
   name: {
@@ -37,6 +39,25 @@ const authorProfileSchema = {
     name: "website",
     type: "text",
     value: null,
+  },
+
+
+  cover: {
+    component: formFile,
+    label: "Cover",
+    name: "cover",
+    type: "text",
+    value: null,
+    readOnly: false
+  },
+
+  avatar: {
+    component: formFile,
+    label: "Avatar",
+    name: "avatar",
+    type: "text",
+    value: null,
+    readOnly: false
   },
 };
 

@@ -16,23 +16,11 @@
             {{ config.appName }}
           </q-btn>
         </q-toolbar-title>
-        <div class="q-ml-md">
-          <q-btn flat to="/stories">
-            {{ $t("stories") }}
+        <div class="q-ml-md gt-xs">
+          <q-btn v-for="(item,idx) in menus " :key="idx" flat @click="$router.push(item.url)">
+            {{ item.name }}
             <q-tooltip>
-              {{ $t("explore_stories") }}
-            </q-tooltip>
-          </q-btn>
-          <q-btn flat to="/books">
-            {{ $t("books") }}
-            <q-tooltip>
-              {{ $t("explore_books") }}
-            </q-tooltip>
-          </q-btn>
-          <q-btn flat to="/search">
-            {{ $t("browse") }}
-            <q-tooltip>
-              {{ $t("search_anything") }}
+              {{ item.tooltip }}
             </q-tooltip>
           </q-btn>
         </div>
@@ -56,12 +44,10 @@
       <router-view />
     </q-page-container>
 
-    <q-footer>
+    <q-footer  v-once>
       <Footer />
     </q-footer>
-<!-- 
-    [{{getSession}}] -->
-    
+
   </q-layout>
 </template>
 
@@ -79,7 +65,17 @@ export default defineComponent({
     Footer
   },
   mounted () {
-    this.$store.dispatch('model/fetchProfile');
+    // this.$store.dispatch('model/fetchProfile');
+    // console.log()
+  },
+  data() {
+    return {
+      menus: [
+        { name:"stories", url:"/stories", tooltip: this.$t('explore_stories')},
+        { name:"books", url:"/books", tooltip: this.$t('explore_books')},
+        { name:"search", url:"/search", tooltip: this.$t('search_anything')},
+      ],
+    };
   },
   setup() {
     const leftDrawerOpen = ref(false);

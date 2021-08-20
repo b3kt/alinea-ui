@@ -5,9 +5,9 @@
         <q-btn
           v-if="isProfileCompleted"
           color="primary"
-          icon="las la-exchange-alt"
-          :label="$t('switch_view')"
-          class="full-width"
+          :label="getCurrentRole"
+          :tooltip="$t('switch_view')"
+          class="full-width "
           flat
         >
           <q-menu fit cover anchor="top left" class="bg-accent">

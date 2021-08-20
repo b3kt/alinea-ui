@@ -162,6 +162,7 @@ export default {
   my_point: "My point",
   my_rent: "My Rent",
   my_stories: "My Stories",
+  my_story: "My Story",
   name: "Name",
   new_books: "New Books",
   new_list: "New list",

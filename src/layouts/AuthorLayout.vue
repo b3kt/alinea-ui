@@ -7,19 +7,16 @@
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
-          <q-avatar size="36px">
-            <img src="https://cdn.quasar.dev/img/avatar.png" />
-          </q-avatar>
-          <span class="q-px-sm"> Hi User </span>
+          <UserBadge :avatar="getAuthorAvatar" :name="getAuthorName"/>
         </q-toolbar-title>
         <div class="q-ml-md">
-          <q-btn class="q-ml-sm" outline @click="onCreateStory()">
+          <q-btn class="gt-sm q-ml-sm" outline @click="onCreateStory()">
             {{ $t("create_story") }}
             <q-tooltip>
               {{ $t("explore_stories") }}
             </q-tooltip>
           </q-btn>
-          <q-btn class="q-ml-sm" outline>
+          <q-btn class="gt-sm q-ml-sm" outline>
             {{ $t("sales_balance") }}
             <q-tooltip>
               {{ $t("explore_books") }}
@@ -44,8 +41,9 @@
 
 <script>
 import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import EssentialLink from "components/EssentialLink";
 import storySchema from "components/forms/story-form";
+import UserBadge from "components/UserBadge";
 import { mapGetters } from "vuex";
 import Toolbar from "components/Toolbar";
 
@@ -54,6 +52,7 @@ export default {
   components: {
     EssentialLink,
     Toolbar,
+    UserBadge
   },
   setup() {
     const leftDrawerOpen = ref(false);
@@ -66,7 +65,9 @@ export default {
       },
     };
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch('model/fetchProfile');
+  },
   methods: {
     onSaveStory() {
       const resp = this.$store.dispatch("model/createStory", this.getDialogModel);

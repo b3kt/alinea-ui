@@ -14,6 +14,24 @@
     </div>
     <div class="row q-col-gutter-md" v-else>
       <div class="col-lg-6 col-12">
+        <Widget>
+          <q-card class="shadow-1" flat bordered>
+            <q-card-section horizontal>
+              <q-img
+                :ratio="3 / 1"
+                class="col"
+                src="https://cdn.quasar.dev/img/parallax2.jpg"
+              />
+              <q-avatar cover class="absolute shadow-1" size="150px" style="left: 20px; top: 20px">
+                <img src="https://cdn.quasar.dev/img/parallax2.jpg" />
+              </q-avatar>
+              <q-card-actions vertical class="justify-around">
+                <q-btn flat round color="red" icon="las la-user-circle" />
+                <q-btn flat round color="accent" icon="las la-image" />
+              </q-card-actions>
+            </q-card-section>
+          </q-card>
+        </Widget>
         <Widget :title="$t('personal_information')">
           <FormPreview :data="getProfile" :onEdit="onEditProfile" />
         </Widget>

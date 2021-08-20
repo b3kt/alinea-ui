@@ -5,7 +5,7 @@ import { sha256 } from "js-sha256";
 import localforage from "localforage";
 import { mapGetters } from "vuex";
 import { openURL, Notify } from "quasar";
-// import { createDynamicForms } from "@asigloo/vue-dynamic-forms";
+import authorProfileSchema from "components/forms/author-profile-form";
 import { axiosUploadInstance } from "boot/axios";
 // import FormData from 'form-data';
 // import fs from 'fs';
@@ -101,18 +101,21 @@ export default boot(async ({ app, router }) => {
         const session = this.$secureStorage.getItem("session");
         return session !== undefined && session !== null ? session : {};
       },
+      getUserFullname() {
+        return this.getSession !== undefined && this.getSession !== null ? this.getSession.decodedToken.name : null;
+      },
       getLoginUrl() {
-        return this.$keycloak !== undefined
+        return this.$keycloak !== undefined && this.$keycloak !== null
           ? this.$keycloak.createLoginUrl()
           : null;
       },
       getLogoutUrl() {
-        return this.$keycloak !== undefined
+        return this.$keycloak !== undefined && this.$keycloak !== null
           ? this.$keycloak.createLogoutUrl()
           : null;
       },
       getRegisterUrl() {
-        return this.$keycloak !== undefined
+        return this.$keycloak !== undefined && this.$keycloak !== null
           ? this.$keycloak.createRegisterUrl()
           : null;
       },
@@ -144,6 +147,32 @@ export default boot(async ({ app, router }) => {
           this.myProfile !== null
         );
       },
+      getAuthorName() {
+        return !this.isNil(this.myProfile) ? this.myProfile.author_name : "";
+      },
+      getAuthorBio() {
+        return !this.isNil(this.myProfile) ? this.myProfile.author_bio : "";
+      },
+      getAuthorCover() {
+        if (!this.isNil(this.myProfile.profile_img)) {
+          const t = this.myProfile.profile_img.filter(function (el) {
+            return el.entity_field === "cover";
+          });
+          return t !== null && t.length > 0 ? t[0].thumbnail_url : this.config.defaultImageURL;
+        } else {
+          return this.config.defaultImageURL;
+        }
+      },
+      getAuthorAvatar() {
+        if (!this.isNil(this.myProfile.profile_img)) {
+          const t = this.myProfile.profile_img.filter(function (el) {
+            return el.entity_field === "avatar";
+          });
+          return t !== null && t.length > 0 ? t[0].thumbnail_url : this.config.defaultImageURL;
+        } else {
+          return this.config.defaultImageURL;
+        }
+      },
     },
     methods: {
       sanitize(value) {
@@ -157,6 +186,10 @@ export default boot(async ({ app, router }) => {
       },
       onResetFormData() {
         this.$store.commit("ui/resetFormModel");
+      },
+      onBecomeAuthor() {
+        this.$store.commit("ui/setFormSchema", authorProfileSchema);
+        this.$store.commit("ui/showActivationDialog");
       },
       doLogout() {
         if (this.getLogoutUrl !== undefined && this.getLogoutUrl !== null) {
@@ -186,10 +219,7 @@ export default boot(async ({ app, router }) => {
             }
           );
       },
-    },
-    created() {
-      //this.initSession();
-    },
+    }
   };
   app.mixin(mixins);
 });

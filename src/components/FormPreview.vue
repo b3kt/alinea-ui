@@ -3,7 +3,7 @@
     <q-card flat bordered>
       <q-card-section class="absolute-right q-pa-sm">
         <q-btn
-          class="q-ml-sm z-top"
+          class="q-ml-sm"
           color="grey"
           @click="onEditEvent()"
           outline
@@ -11,7 +11,7 @@
           icon="la la-edit"
         ></q-btn>
         <q-btn v-if="enableDelete"
-          class="q-ml-sm z-top"
+          class="q-ml-sm"
           color="grey"
           @click="onDeleteEvent()"
           outline

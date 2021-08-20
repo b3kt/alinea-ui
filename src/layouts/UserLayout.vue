@@ -7,10 +7,7 @@
       <q-toolbar>
         <q-btn flat round dense icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
-          <q-avatar size="36px">
-            <img src="https://cdn.quasar.dev/img/avatar.png" />
-          </q-avatar>
-          <span class="q-px-sm"> Hi User </span>
+          <UserBadge :avatar="config.defaultImageURL" :name="getUserFullname"/>
         </q-toolbar-title>
         <div class="q-ml-md">
           <q-btn class="q-ml-sm" outline>
@@ -24,8 +21,6 @@
       <Toolbar /> 
     </q-header>
 
-
-    <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
     <q-drawer v-model="leftDrawerOpen" side="left" bordered class="bg-grey-2">
       <EssentialLink />
     </q-drawer>
@@ -33,7 +28,6 @@
     <DashboardDialog />
 
     <q-page-container>
-      <!-- This is where pages get injected -->
       <router-view />
     </q-page-container>
   </q-layout>
@@ -43,6 +37,7 @@
 import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import DashboardDialog from "components/DashboardDialog";
+import UserBadge from "components/UserBadge";
 import Toolbar from "components/Toolbar";
 import storySchema from "components/forms/story-form";
 import { mapGetters } from "vuex";
@@ -52,7 +47,8 @@ export default {
   components: {
     EssentialLink,
     DashboardDialog,
-    Toolbar
+    Toolbar,
+    UserBadge
   },
   setup() {
     const leftDrawerOpen = ref(false);

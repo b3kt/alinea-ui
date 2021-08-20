@@ -1,4 +1,6 @@
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import fetch from 'cross-fetch';
+
 export /* async */ function getClientOptions(/* {app, router, ...} */ options) {
   return Object.assign(
     // General options.
@@ -8,6 +10,7 @@ export /* async */ function getClientOptions(/* {app, router, ...} */ options) {
           process.env.GRAPHQL_URI ||
           // Change to your graphql endpoint.
           'https://alinea-hasura.herokuapp.com/v1/graphql',
+        fetch
       }),
       cache: new InMemoryCache({
         addTypename: false

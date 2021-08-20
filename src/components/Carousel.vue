@@ -9,8 +9,7 @@
     arrows
     height="300px"
     class="bg-primary text-white shadow-1 rounded-borders"
-    navigation-icon="la la-minus"
-  >
+    navigation-icon="la la-minus">
     <q-carousel-slide v-for="i in 5" :key="i" name="style" class="column no-wrap">
       <CarouselItem />
     </q-carousel-slide>

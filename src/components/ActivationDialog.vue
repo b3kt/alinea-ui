@@ -140,7 +140,12 @@ export default {
         this.$refs.stepper.next();
       } else if (step === 3) {
         if (this.onValidate()) {
-          this.$refs.stepper.next();
+          const resp = this.$store.dispatch("model/enableAuthor");
+          if(resp !== undefined){
+            resp.then((resp) => {
+              this.doLogout();
+            })
+          }
         } else {
           alert("invalid");
         }

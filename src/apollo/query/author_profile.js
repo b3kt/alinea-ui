@@ -11,6 +11,13 @@ export function fetchSelfProfileQuery(contextHeaders) {
           email
           phone
           website
+          author_name
+          author_bio
+          profile_img{
+            url
+            thumbnail_url
+            entity_field
+          }
         }
       }
     `,

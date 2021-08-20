@@ -1,12 +1,12 @@
 <template>
-  <q-dialog v-model="dashboardDialog" persistent :maximized="maximized" @before-hide="onResetFormData()">
+  <q-dialog v-model="dashboardDialog" persistent :maximized="maximized" @before-hide="onResetFormData()" transition-show="slide-up" transition-hide="slide-down">
     <q-card class="my-card">
       <q-bar class="my-bar bg-grey-4 no-bottom-radius">
         <q-space />
         <q-btn dense flat icon="crop_square" @click="maximize()" v-if="!maximized">
           <q-tooltip>{{ $t("tooltip_maximize") }}</q-tooltip>
         </q-btn>
-        <q-btn dense flat icon="minimize" @click="minimize()" v-else>
+        <q-btn class="gt-sm" dense flat icon="minimize" @click="minimize()" v-else>
           <q-tooltip>{{ $t("tooltip_minimize") }}</q-tooltip>
         </q-btn>
         <q-btn dense flat icon="close" @click="close()">
@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      maximized: false,
+      maximized: this.$q.screen.xs,
     };
   },
   methods: {

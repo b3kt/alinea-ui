@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAuthenticated">
+  <div v-if="isAuthenticated" v-once>
     <q-list class="rounded-borders">
       <div>
         <ViewSwitcher />
@@ -14,8 +14,8 @@
             <q-item-section>{{$t('update_profile')}}</q-item-section>
         </q-item>
       </div>
-      <div v-else>
-        <div v-for="(item, index) in menus" v-bind:key="index">
+      <div v-if="isNotEmpty(menus)">
+        <div v-for="(item, index) in menus" :key="index" >
           <q-item v-if="item.menu.children.length === 0" :to="item.menu.target_url">
             <q-item-section
               v-if="item.menu.icon !== undefined && item.menu.icon !== null"
@@ -30,6 +30,7 @@
             group="menu"
             v-else
             expand-separator
+            :duration="100"
             :icon="item.menu.icon"
             :label="item.menu.label"
           >
@@ -52,12 +53,18 @@
           </q-expansion-item>
         </div>
       </div>
-      <!-- <q-item @click.stop="doLogout()" clickable>
+      <q-item v-if="!isNotEmpty(menus) && getCurrentRole === 'author' "  @click.stop="onBecomeAuthor()" clickable>
+        <q-item-section avatar>
+          <q-icon name="las la-feather-alt" />
+        </q-item-section>
+        <q-item-section>{{ $t("become_author") }}</q-item-section>
+      </q-item>
+      <q-item @click.stop="doLogout()" clickable>
         <q-item-section avatar>
           <q-icon name="la la-power-off" />
         </q-item-section>
         <q-item-section>{{ $t("logout") }}</q-item-section>
-      </q-item> -->
+      </q-item>
     </q-list>
 
     <DashboardDialog />
@@ -138,7 +145,6 @@ export default defineComponent({
             });
             this.$store.commit("ui/hideDashboardDialog");
             this.$store.commit("model/setProfile", null);
-            // this.initProfile();
           });
         }
       }

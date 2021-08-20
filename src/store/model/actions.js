@@ -23,7 +23,8 @@ import {
   deleteAddressMutation,
   createProfileMutation,
   createAddressMutation,
-  enableUserMutation
+  enableUserMutation,
+  enableAuthorMutation
 } from "../../apollo/mutation/users";
 
 
@@ -179,6 +180,23 @@ export function updateAddress(context, data) {
       });
   }
 }
+
+export function enableAuthor(context) {
+  const contextHeaders = getContextHeaders();
+  if (
+    contextHeaders !== undefined &&
+    contextHeaders !== null
+  ) {
+    return apolloClientInstance
+    .mutate(enableAuthorMutation(contextHeaders)).then((response) => {
+      if (response.data.insert_user_roles !== undefined &&
+        response.data.insert_user_roles !== null) {
+        console.log(response.data.insert_user_roles);
+      }
+    });
+  }
+}
+
 
 export function createProfile(context, data) {
   const contextHeaders = getContextHeaders();

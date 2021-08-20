@@ -24,9 +24,9 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'app',
-      'axios',
-      'keycloak',
-      'apollo'
+      { path: 'axios', server: false, client: true },
+      { path: 'keycloak', server: false, client: true },
+      'apollo',
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

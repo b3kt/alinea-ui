@@ -2,7 +2,7 @@
   <div>
     <q-page padding>
       <!-- content -->
-      <Widget :title="$t('my_stories')">
+      <Widget :title="$t('my_story')">
         <q-card bordered flat>
           <q-card-section>
             <BookItem

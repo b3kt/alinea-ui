@@ -40,6 +40,9 @@ function isNil(value) {
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot(async ({ app, router, store }) => {
   let $keycloak = undefined;
+
+
+
   async function isTokenReady() {
     return new Promise((resolve) => checkToken(resolve));
   }
@@ -159,8 +162,6 @@ export default boot(async ({ app, router, store }) => {
   app.config.globalProperties.$keycloak = _keycloak;
 
   const isRequireAuth = secureStorage.getItem("is_require_auth");
-  console.log(isRequireAuth)
-  console.log(_keycloak.authenticated)
   if (!isNil(isRequireAuth) && isRequireAuth && (_keycloak.authenticated === undefined || !_keycloak.authenticated)) {
     await initKeycloak(keycloakInitOptions);
   }

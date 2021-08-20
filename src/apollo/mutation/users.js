@@ -142,3 +142,17 @@ export function enableUserMutation(contextHeaders) {
     context: contextHeaders,
   };
 }
+
+
+export function enableAuthorMutation(contextHeaders) {
+  return {
+    mutation: gql`
+      mutation enableUserRole {
+        insert_user_roles(objects: { role: "author" }) {
+          affected_rows
+        }
+      }
+    `,
+    context: contextHeaders,
+  };
+}

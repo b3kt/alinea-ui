@@ -152,7 +152,8 @@ export default {
   },
   methods: {
     onClickEvent() {
-      this.$router.push(this.to);
+      this.$router.push({ to: this.to });
+      // this.$router.go();
     },
     onEditEvent() {
       this.onEdit();

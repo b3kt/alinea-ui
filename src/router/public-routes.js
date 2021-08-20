@@ -19,6 +19,11 @@ const childrenRoutes = [
   },
   {
     meta: { requiresAuth: false },
+    path: "story/:story_uid?",
+    component: () => import("pages/Story.vue"),
+  },
+  {
+    meta: { requiresAuth: false },
     path: "books",
     component: () => import("pages/Books.vue"),
   },

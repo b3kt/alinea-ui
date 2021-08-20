@@ -6,11 +6,11 @@
       </q-btn>
     </div>
     <div v-else>
-      <q-btn outline @click="onBecomeAuthor()" class="q-mr-sm" v-if="myProfile === null || myProfile === undefined">
+     <q-btn outline @click="onBecomeAuthor()" class="q-mr-sm" v-if="myProfile === null || myProfile === undefined">
         {{ $t("become_author") }}
       </q-btn>
-      <q-btn outline @click="doLogout()">
-        {{ $t("logout") }}
+      <q-btn outline @click="doLogout()" icon="las la-sign-out-alt" class="q-px-sm" :tooltip="$t('tooltip_logout')">
+        <div class="gt-sm">{{ $t("logout") }}</div>
       </q-btn>
     </div>
 
@@ -34,14 +34,13 @@
       </q-card>
     </q-dialog>
 
-    <ActivationDialog />
+    <ActivationDialog v-if="isAuthenticated" />
   </div>
 </template>
 
 <script>
 import { secureStorage } from "boot/app";
 import ActivationDialog from "components/ActivationDialog";
-import authorProfileSchema from "components/forms/author-profile-form";
 
 export default {
   name: "LoginDialog",
@@ -52,10 +51,6 @@ export default {
   methods: {
     onShowLoginDialog() {
       this.$store.commit("ui/showLoginDialog");
-    },
-    onBecomeAuthor() {
-      this.$store.commit("ui/setFormSchema", authorProfileSchema);
-      this.$store.commit("ui/showActivationDialog");
     },
     setRequireAuth() {
       secureStorage.setItem("is_require_auth", true);

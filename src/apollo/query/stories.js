@@ -6,6 +6,7 @@ export function fetchStoriesPublicQuery() {
       query fetchStories {
         stories {
           description
+          story_uid
           title
           author{
             name
@@ -27,6 +28,7 @@ export function fetchTopStoriesQuery() {
       query fetchTopStories {
         stories : stories_top {
           description
+          story_uid
           title
           author{
             name
@@ -48,6 +50,7 @@ export function fetchNewStoriesQuery() {
       query fetchNewStories {
         stories : stories_new {
           description
+          story_uid
           title
           author{
             name
@@ -69,6 +72,7 @@ export function fetchSaleStoriesQuery() {
       query fetchSaleStories {
         stories : stories_sale {
           description
+          story_uid
           title
           author{
             name

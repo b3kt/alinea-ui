@@ -7,7 +7,7 @@
         class="hide-native-scrollbar"
       >
         <template v-slot="{ item }">
-          <BookItem :data="item" mode="simple" :readonly="true" classes="q-mr-md" />
+          <BookItem :data="item" mode="simple" :readonly="true" classes="q-mr-md" :to="'/story/' + item.story_uid" />
         </template>
       </q-virtual-scroll>
     </Widget>

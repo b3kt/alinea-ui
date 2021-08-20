@@ -16,7 +16,7 @@
           class="hide-native-scrollbar"
         >
           <template v-slot="{ item }">
-            <BookItem :data="item" mode="detail" :readonly="true" />
+            <BookItem :data="item" mode="detail" :readonly="true" :to="'/story/'+item.story_uid"/>
           </template>
         </q-virtual-scroll>
       </SectionPanel>

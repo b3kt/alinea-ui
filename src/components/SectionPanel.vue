@@ -2,7 +2,7 @@
   <q-card class="my-card x-card-tile q-my-lg bg-transparent" flat>
     <q-card-section horizontal class="row">
       <q-card-section class="col-11">
-        <div class="text-h5 text-primary text-weight-bold">
+        <div class="text-h5 text-primary text-weight-bold text-capitalize">
           {{ getTitle }}
         </div>
       </q-card-section>
