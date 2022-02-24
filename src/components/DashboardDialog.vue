@@ -3,13 +3,13 @@
     <q-card class="my-card">
       <q-bar class="my-bar bg-grey-4 no-bottom-radius">
         <q-space />
-        <q-btn dense flat icon="crop_square" @click="maximize()" v-if="!maximized">
+        <q-btn dense flat icon="las la-stop" @click="maximize()" v-if="!maximized">
           <q-tooltip>{{ $t("tooltip_maximize") }}</q-tooltip>
         </q-btn>
-        <q-btn class="gt-sm" dense flat icon="minimize" @click="minimize()" v-else>
+        <q-btn class="gt-sm" dense flat icon="las la-minus" @click="minimize()" v-else>
           <q-tooltip>{{ $t("tooltip_minimize") }}</q-tooltip>
         </q-btn>
-        <q-btn dense flat icon="close" @click="close()">
+        <q-btn dense flat icon="las la-times" @click="close()">
           <q-tooltip>{{ $t("close") }}</q-tooltip>
         </q-btn>
       </q-bar>

@@ -34,13 +34,24 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
-import DashboardDialog from "components/DashboardDialog";
-import UserBadge from "components/UserBadge";
-import Toolbar from "components/Toolbar";
-import storySchema from "components/forms/story-form";
+import { ref, defineAsyncComponent } from "vue";
 import { mapGetters } from "vuex";
+
+const EssentialLink = defineAsyncComponent(() =>
+  import("components/EssentialLink")
+)
+const DashboardDialog = defineAsyncComponent(() =>
+  import("components/DashboardDialog")
+)
+const UserBadge = defineAsyncComponent(() =>
+  import("components/UserBadge")
+)
+const Toolbar = defineAsyncComponent(() =>
+  import("components/Toolbar")
+)
+const storySchema = defineAsyncComponent(() =>
+  import("components/forms/story-form")
+)
 
 export default {
   name: "AuthorLayout",

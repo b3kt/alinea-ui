@@ -10,6 +10,7 @@ export default function () {
     menus: [],
     detail: {
       story: {},
+      chapter: {},
     },
     feeds : {
       stories: [],

@@ -6,16 +6,14 @@
       </div>
       <div v-if="!isProfileCompleted">
         <q-item @click="onCompleteProfile()" clickable>
-            <q-item-section
-              avatar
-            >
-              <q-icon name="la la-user" />
-            </q-item-section>
-            <q-item-section>{{$t('update_profile')}}</q-item-section>
+          <q-item-section avatar>
+            <q-icon name="la la-user" />
+          </q-item-section>
+          <q-item-section>{{ $t("update_profile") }}</q-item-section>
         </q-item>
       </div>
       <div v-if="isNotEmpty(menus)">
-        <div v-for="(item, index) in menus" :key="index" >
+        <div v-for="(item, index) in menus" :key="index">
           <q-item v-if="item.menu.children.length === 0" :to="item.menu.target_url">
             <q-item-section
               v-if="item.menu.icon !== undefined && item.menu.icon !== null"
@@ -26,7 +24,8 @@
             <q-item-section>{{ item.menu.label }}</q-item-section>
           </q-item>
 
-          <q-expansion-item
+          <q-expansion-item 
+            expand-icon="las la-chevron-down"
             group="menu"
             v-else
             expand-separator
@@ -53,7 +52,11 @@
           </q-expansion-item>
         </div>
       </div>
-      <q-item v-if="!isNotEmpty(menus) && getCurrentRole === 'author' "  @click.stop="onBecomeAuthor()" clickable>
+      <q-item
+        v-if="!isNotEmpty(menus) && getCurrentRole === 'author'"
+        @click.stop="onBecomeAuthor()"
+        clickable
+      >
         <q-item-section avatar>
           <q-icon name="las la-feather-alt" />
         </q-item-section>
@@ -90,18 +93,17 @@ export default defineComponent({
     },
   },
   created() {
-    this.$store.dispatch("model/fetchProfile")
-      .then((resp) => {
-        console.log(resp)
-      });
+    this.$store.dispatch("model/fetchProfile").then((resp) => {
+      console.log(resp);
+    });
   },
   mounted() {
-    if (!this.$keycloak.isTokenExpired()) {
+    if (this.isAuthenticated) {
       this.$store.dispatch("model/fetchMenus");
     }
   },
   methods: {
-    onCompleteProfile(){
+    onCompleteProfile() {
       this.$store.commit("ui/showDashboardDialog", {
         title: this.$t("complete_profile"),
         schema: profileSchema,
@@ -134,7 +136,7 @@ export default defineComponent({
           website:
             this.getDialogModel.website !== undefined
               ? this.getDialogModel.website
-              : this.getProfile.website
+              : this.getProfile.website,
         };
         const resp = this.$store.dispatch("model/createProfile", vars);
         if (resp !== undefined && resp !== null) {
@@ -148,7 +150,7 @@ export default defineComponent({
           });
         }
       }
-    }
+    },
   },
 });
 </script>

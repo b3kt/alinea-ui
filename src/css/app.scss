@@ -1,19 +1,18 @@
-.x-default-maxwidth{
-    width: 100%;
-    max-width: 1280px !important;
+.x-default-maxwidth {
+  width: 100%;
+  max-width: 1280px !important;
 }
-.text-smaller{
-  font-size: smaller ;
+.text-smaller {
+  font-size: smaller;
 }
-.text-small{
-  font-size: small ;
+.text-small {
+  font-size: small;
 }
-.hyperlink{
+.hyperlink {
   text-decoration: none;
   color: $primary;
   font-weight: bold;
 }
-
 
 // @font-face
 //     font-family: 'Josefin Sans'
@@ -75,8 +74,9 @@
 //     font-weight: normal
 //     font-style: italic
 
-html, body{
-    overflow-x: hidden;
+html,
+body {
+  overflow-x: hidden;
 }
 
 // // app global css in Sass form
@@ -90,7 +90,7 @@ html, body{
 //     max-width: 300px
 
 // .x-text-small
-//     font-size: small    
+//     font-size: small
 
 // .x-title-lineheight
 //     line-height: 1em
@@ -155,7 +155,7 @@ html, body{
 //     display: -webkit-box
 //     -webkit-line-clamp: 2
 //     -webkit-box-orient: vertical
- 
+
 // .mobile .q-menu
 //     left: 10px
 //     right: 10px
@@ -165,9 +165,20 @@ html, body{
 //     // margin-top: 16px
 
 .hide-native-scrollbar {
-    scrollbar-width: none; /* Firefox 64 */
-    -ms-overflow-style: none; /* Internet Explorer 11 */
-    &::-webkit-scrollbar { /** WebKit */
-      display: none;
-    }
+  scrollbar-width: none; /* Firefox 64 */
+  -ms-overflow-style: none; /* Internet Explorer 11 */
+  &::-webkit-scrollbar {
+    /** WebKit */
+    display: none;
   }
+}
+
+.chapter-sidebar {
+  width: 300px;
+}
+
+.q-btn__content{
+  font-weight: normal;
+  font-size: small;
+  
+}

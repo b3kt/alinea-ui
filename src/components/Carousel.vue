@@ -7,9 +7,11 @@
     navigation
     padding
     arrows
+    next-icon="las la-chevron-right"
+    prev-icon="las la-chevron-left"
     height="300px"
     class="bg-primary text-white shadow-1 rounded-borders"
-    navigation-icon="la la-minus">
+    navigation-icon="las la-minus">
     <q-carousel-slide v-for="i in 5" :key="i" name="style" class="column no-wrap">
       <CarouselItem />
     </q-carousel-slide>

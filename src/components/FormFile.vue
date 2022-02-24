@@ -19,7 +19,7 @@
       style="max-width: 300px"
     >
       <template v-slot:prepend>
-        <q-icon name="attach_file" />
+        <q-icon name="las la-paperclip" />
       </template>
     </q-file>
     <q-card v-else style="width: 120px" flat bordered>

@@ -14,6 +14,9 @@ export function setFeedsObject (state, params) {
 export function setStory (state, story) {
   state.detail.story = story;
 }
+export function setChapter (state, chapter) {
+  state.detail.chapter = chapter;
+}
 
 export function setAddress (state, address) {
   state.user.address = address;

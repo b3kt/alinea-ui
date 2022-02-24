@@ -13,6 +13,9 @@ export function getStories (state) {
 export function getStory (state) {
     return state.detail.story;
 }
+export function getChapter (state) {
+    return state.detail.chapter;
+}
 export function getAddress (state) {
     return state.user.address;
 }

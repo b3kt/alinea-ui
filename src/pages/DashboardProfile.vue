@@ -9,6 +9,7 @@
       <div class="col-lg-6 col-12">
         <Widget :title="$t('my_chapter_draft')">
           <!-- <ChapterDraftList /> -->
+          No Data
         </Widget>
       </div>
     </div>

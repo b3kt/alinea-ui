@@ -44,6 +44,8 @@
 </template>
 
 <script>
+
+import { mapGetters } from "vuex";
 import authorProfileSchema from "components/forms/author-profile-form";
 export default {
   name: "ProfileCard",
@@ -52,12 +54,12 @@ export default {
   },
   methods: {
     populateFormModel() {
-      if (!this.isNil(this.myProfile)) {
-        authorProfileSchema.name.value = this.myProfile.name;
-        authorProfileSchema.bio.value = this.myProfile.bio;
-        authorProfileSchema.email.value = this.myProfile.email;
-        authorProfileSchema.phone.value = this.myProfile.phone;
-        authorProfileSchema.website.value = this.myProfile.website;
+      if (!this.isNil(this.getProfile)) {
+        authorProfileSchema.name.value = this.getProfile.name;
+        authorProfileSchema.bio.value = this.getProfile.bio;
+        authorProfileSchema.email.value = this.getProfile.email;
+        authorProfileSchema.phone.value = this.getProfile.phone;
+        authorProfileSchema.website.value = this.getProfile.website;
       }
     },
     onEditProfile() {
@@ -65,11 +67,82 @@ export default {
       this.$store.commit("ui/showDashboardDialog", {
         title: this.$t("edit_profile"),
         schema: authorProfileSchema,
+        events: {
+          onSave: () => {
+            this.onSaveProfile();
+          },
+        }
       });
+    },
+    onSaveProfile() {
+      if (this.getDialogModel !== undefined && this.getDialogModel !== null) {
+        const vars = {
+          name:
+            this.getDialogModel.name !== undefined
+              ? this.getDialogModel.name
+              : this.getProfile.name,
+          bio:
+            this.getDialogModel.bio !== undefined
+              ? this.getDialogModel.bio
+              : this.getProfile.bio,
+          email: this.getProfile.email,
+          phone:
+            this.getDialogModel.phone !== undefined
+              ? this.getDialogModel.phone
+              : this.getProfile.phone,
+          website:
+            this.getDialogModel.website !== undefined
+              ? this.getDialogModel.website
+              : this.getProfile.website,
+          uid: this.getUserUID,
+        };
+
+        const resp = this.$store.dispatch("model/updateProfile", vars);
+        if (resp !== undefined && resp !== null) {
+          resp.then(() => {
+            this.$q.notify({
+              color: "positive",
+              message: this.$t("succesfully_saved"),
+            });
+            this.$store.commit("ui/hideDashboardDialog");
+            this.$store.commit("model/setProfile", null);
+            this.initProfile();
+          });
+        }
+
+        // if(this.getDialogModel.cover !== undefined){
+        //   this.doUpload({
+        //     file: this.getDialogModel.cover,
+        //     name: 'profile',
+        //     field: 'cover',
+        //     id: this.getUserUID
+        //   }).then(() => {
+        //     this.$store.commit("ui/hideDashboardDialog");
+        //     this.$store.commit("model/setProfile", null);
+        //   });
+        // }
+
+        // if(this.getDialogModel.avatar !== undefined){
+        //   this.doUpload({
+        //     file: this.getDialogModel.avatar,
+        //     name: 'profile',
+        //     field: 'avatar',
+        //     id: this.getUserUID
+        //   }).then(() => {
+        //     this.$store.commit("ui/hideDashboardDialog");
+        //     this.$store.commit("model/setProfile", null);
+        //   });
+        // }
+      }
     },
   },
   computed: {
-    
+    ...mapGetters({
+      getProfile: "model/getProfile",
+    }),
+    getDialogModel() {
+      return this.getDialogForm.model;
+    },
   },
 };
 </script>

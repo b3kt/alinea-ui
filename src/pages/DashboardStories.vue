@@ -26,14 +26,19 @@
               v-model="text"
               input-class="text-left"
               standout="bg-grey text-white"
-              @blur="onFilter()"
+              @change="onFilter(text)"
               :placeholder="$t('type_keyword_to_filter')"
             >
               <template v-slot:prepend>
-                <q-icon v-if="text === ''" name="search" />
+                <q-icon v-if="isNil(text)" name="las la-search" />
               </template>
               <template v-slot:append>
-                <q-icon v-if="text !== ''" name="clear" class="cursor-pointer" @click="text = ''" />
+                <q-icon
+                  v-if="!isNil(text)"
+                  name="las la-times"
+                  class="cursor-pointer"
+                  @click="onFilter(null)"
+                />
               </template>
             </q-input>
           </q-card-section>
@@ -42,8 +47,8 @@
             bordered
             class="rounded-borders q-col-gutter-lg fit row inline wrap justify-start items-start content-start q-pr-none q-pl-md q-py-md"
           >
-            <div v-for="(story, idx) in getStories" v-bind:key="idx" class="">
-              <BookItem :data="story" :to="'/author/story/'+story.story_uid"/>
+            <div v-for="(story, idx) in this.getStories" v-bind:key="idx" class="">
+              <BookItem :data="story" :to="'/author/story/' + story.story_uid" />
             </div>
           </div>
         </q-card>
@@ -76,15 +81,34 @@ export default {
         { id: "STORY_STATUS_RELEASED", label: this.$t("released") },
       ],
       tab: "STORY_STATUS_ALL",
+      stories: [],
     };
   },
   methods: {
-    onFilter() {
-      // alert('asdasda');
+    onFilter(searchQry) {
+      if (!this.isNil(searchQry)) {
+        if (this.isNotEmpty(this.getStories)) {
+          const filtered = this.getStories.filter(function (el) {
+            return el.title.toLowerCase().includes(searchQry.toLowerCase());
+          });
+          this.$store.commit("model/setStories", filtered);
+        }
+      } else {
+        this.text = null;
+        this.$store.dispatch("model/fetchAuthorStories");
+      }
     },
-    onChangeTab(tab){
-
-    }
+    onChangeTab(tab) {
+      this.$store.dispatch("model/fetchAuthorStories").then((resp) => {
+        if (tab !== "STORY_STATUS_ALL") {
+          console.log(resp);
+          const filtered = this.getStories.filter(function (el) {
+            return el.status.code.toLowerCase().includes(tab.toLowerCase());
+          });
+          this.$store.commit("model/setStories", filtered);
+        }
+      });
+    },
   },
   mounted() {
     this.$store.dispatch("model/fetchAuthorStories");

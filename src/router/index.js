@@ -1,7 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import routes from './public-routes'
-import { mapGetters } from "vuex";
+import routes from "./public-routes";
+// import { mapGetters } from "vuex";
 
 // import storeTmp from '../store'
 

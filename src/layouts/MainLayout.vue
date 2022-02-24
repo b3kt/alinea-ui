@@ -7,7 +7,7 @@
           flat
           dense
           round
-          icon="menu"
+          icon="las la-bars"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
@@ -52,17 +52,20 @@
 </template>
 
 <script>
-import EssentialLink from "components/EssentialLink.vue";
-import LoginDialog from "components/LoginDialog";
-import Footer from "components/Footer";
-import { defineComponent, ref } from "vue";
+import { defineComponent, defineAsyncComponent, ref } from "vue";
 
 export default defineComponent({
   name: "MainLayout",
   components: {
-    EssentialLink,
-    LoginDialog,
-    Footer
+    EssentialLink: defineAsyncComponent(() =>
+      import("components/EssentialLink")
+    ),
+    LoginDialog: defineAsyncComponent(() =>
+      import("components/LoginDialog")
+    ),
+    Footer:  defineAsyncComponent(() =>
+      import("components/Footer")
+    )
   },
   mounted () {
     // this.$store.dispatch('model/fetchProfile');

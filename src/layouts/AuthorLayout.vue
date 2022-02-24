@@ -5,7 +5,7 @@
     <!-- (Optional) The Header -->
     <q-header class="bg-secondary">
       <q-toolbar>
-        <q-btn flat round dense icon="menu" @click="toggleLeftDrawer" />
+        <q-btn flat round dense icon="las la-bars" @click="toggleLeftDrawer" />
         <q-toolbar-title>
           <UserBadge :avatar="getAuthorAvatar" :name="getAuthorName"/>
         </q-toolbar-title>
@@ -40,12 +40,25 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import EssentialLink from "components/EssentialLink";
-import storySchema from "components/forms/story-form";
-import UserBadge from "components/UserBadge";
+import { ref, defineAsyncComponent } from "vue";
 import { mapGetters } from "vuex";
-import Toolbar from "components/Toolbar";
+// import storySchema from "components/forms/story-form";
+// import EssentialLink from "components/EssentialLink";
+// import UserBadge from "components/UserBadge";
+// import Toolbar from "components/Toolbar";
+
+const EssentialLink = defineAsyncComponent(() =>
+  import("components/EssentialLink")
+)
+const UserBadge = defineAsyncComponent(() =>
+  import("components/UserBadge")
+)
+const Toolbar = defineAsyncComponent(() =>
+  import("components/Toolbar")
+)
+const storySchema = defineAsyncComponent(() =>
+  import("components/forms/story-form")
+)
 
 export default {
   name: "AuthorLayout",

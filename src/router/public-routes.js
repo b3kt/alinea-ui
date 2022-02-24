@@ -42,6 +42,19 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: childrenRoutes,
   },
+  {
+    meta: { requiresAuth: false },
+    name: "read",
+    path: "/read",
+    component: () => import("layouts/ReadingLayout.vue"),
+    children: [
+      {
+        meta: { requiresAuth: false },
+        path: "chapter/:chapter_uid?",
+        component: () => import("pages/Chapter.vue"),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   // {

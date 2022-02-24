@@ -33,7 +33,7 @@
           <q-step
             :name="2"
             :caption="$t('optional')"
-            icon="create_new_folder"
+            icon="las la-user-circle"
             :title="$t('set_avatar')"
             :done="step > 2"
           >
@@ -45,7 +45,7 @@
             </div>
           </q-step>
 
-          <q-step :name="3" :title="$t('complete_profile')" icon="add_comment">
+          <q-step :name="3" :title="$t('complete_profile')" icon="las la-check-circle">
             <div class="row">
               <div class="col text-h4 text-center">
                 {{ $t("complete_author_profile_2") }}

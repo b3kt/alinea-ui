@@ -42,23 +42,23 @@ const authorProfileSchema = {
   },
 
 
-  cover: {
-    component: formFile,
-    label: "Cover",
-    name: "cover",
-    type: "text",
-    value: null,
-    readOnly: false
-  },
+  // cover: {
+  //   component: formFile,
+  //   label: "Cover",
+  //   name: "cover",
+  //   type: "text",
+  //   value: null,
+  //   readOnly: false
+  // },
 
-  avatar: {
-    component: formFile,
-    label: "Avatar",
-    name: "avatar",
-    type: "text",
-    value: null,
-    readOnly: false
-  },
+  // avatar: {
+  //   component: formFile,
+  //   label: "Avatar",
+  //   name: "avatar",
+  //   type: "text",
+  //   value: null,
+  //   readOnly: false
+  // },
 };
 
 export default authorProfileSchema ;

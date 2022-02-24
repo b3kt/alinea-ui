@@ -45,7 +45,7 @@ module.exports = configure(function (ctx) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       // 'roboto-font', // optional, you are not bound to it
-      "material-icons" // optional, you are not bound to it
+      // "material-icons" // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
@@ -80,14 +80,25 @@ module.exports = configure(function (ctx) {
     devServer: {
       https: true,
       port: 443,
-      open: false // opens browser window automatically
+      open: false, // opens browser window automatically
+      server: {
+        type: 'https', // NECESSARY (alternative is type 'http')
+        options: {
+          // Use ABSOLUTE paths or path.join(__dirname, 'root/relative/path')
+          key: "alinea.herokuapp.com.key",
+          pfx: "alinea.herokuapp.com.pfx",
+          cert: "alinea.herokuapp.com.crt",
+          ca: "alinea.herokuapp.com.pem",
+          passphrase: 'password' // do you need it?
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       config: {},
 
-      // iconSet: 'material-icons', // Quasar icon set
+      iconSet: 'line-awesome', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
       // For special cases outside of where the auto-import stategy can have an impact

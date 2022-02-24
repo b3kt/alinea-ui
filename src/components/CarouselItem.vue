@@ -9,7 +9,7 @@
       </div>
       <q-card class="q-mx-auto" style="width:180px">
         <q-card-section class="q-pa-xs">
-          <q-img :src="config.defaultImageURL" />
+          <q-img lazy :src="config.defaultImageURL" />
         </q-card-section>
       </q-card>
     </div>

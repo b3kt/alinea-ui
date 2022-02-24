@@ -6,10 +6,10 @@
       </q-btn>
     </div>
     <div v-else>
-     <q-btn outline @click="onBecomeAuthor()" class="q-mr-sm" v-if="myProfile === null || myProfile === undefined">
+     <q-btn :aria-label="$t('become_author')" outline @click="onBecomeAuthor()" class="q-mr-sm" v-if="myProfile === null || myProfile === undefined">
         {{ $t("become_author") }}
       </q-btn>
-      <q-btn outline @click="doLogout()" icon="las la-sign-out-alt" class="q-px-sm" :tooltip="$t('tooltip_logout')">
+      <q-btn :aria-label="$t('logout')" outline @click="doLogout()" icon="las la-sign-out-alt" class="q-px-sm" :tooltip="$t('tooltip_logout')">
         <div class="gt-sm">{{ $t("logout") }}</div>
       </q-btn>
     </div>

@@ -23,13 +23,13 @@ const profileSchema = {
     name: "phone",
     type: "phone",
   },
-  email: {
-    component: formText,
-    label: "Email",
-    name: "email",
-    type: "email",
-    value: null,
-  },
+  // email: {
+  //   component: formText,
+  //   label: "Email",
+  //   name: "email",
+  //   type: "email",
+  //   value: null,
+  // },
   website: {
     component: formText,
     label: "Website",

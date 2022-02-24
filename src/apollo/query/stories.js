@@ -8,7 +8,7 @@ export function fetchStoriesPublicQuery() {
           description
           story_uid
           title
-          author{
+          author {
             name
             bio
           }
@@ -26,11 +26,11 @@ export function fetchTopStoriesQuery() {
   return {
     query: gql`
       query fetchTopStories {
-        stories : stories_top {
+        stories: stories_top {
           description
           story_uid
           title
-          author{
+          author {
             name
             bio
           }
@@ -48,11 +48,11 @@ export function fetchNewStoriesQuery() {
   return {
     query: gql`
       query fetchNewStories {
-        stories : stories_new {
+        stories: stories_new {
           description
           story_uid
           title
-          author{
+          author {
             name
             bio
           }
@@ -70,11 +70,11 @@ export function fetchSaleStoriesQuery() {
   return {
     query: gql`
       query fetchSaleStories {
-        stories : stories_sale {
+        stories: stories_sale {
           description
           story_uid
           title
-          author{
+          author {
             name
             bio
           }
@@ -104,6 +104,9 @@ export function fetchMyStoriesQuery(contextHeaders) {
             thumbnail_url
             url
           }
+          status {
+            code
+          }
         }
       }
     `,
@@ -111,18 +114,52 @@ export function fetchMyStoriesQuery(contextHeaders) {
   };
 }
 
+export function findChapterByUidQuery(vars, contextHeaders) {
+  return {
+    query: gql`
+      query findChapterByUid($uid: uuid!) {
+        chapters(where: { chapter_uid: { _eq: $uid } }) {
+          content_md
+          created_by
+          cover_img {
+            thumbnail_url
+            entity_field
+          }
+          created_date
+          intro
+          last_modified_date
+          last_modified_by
+          status {
+            code
+            name
+          }
+          story {
+            title
+          }
+          title
+        }
+      }
+    `,
+    variables: vars,
+    context: contextHeaders,
+  };
+}
+
 export function findStoryByUidQuery(vars, contextHeaders) {
   return {
     query: gql`
-     query findStoryByUid($uid: uuid!) {
-        stories(where: {story_uid: {_eq: $uid}}) {
+      query findStoryByUid($uid: uuid!) {
+        stories(where: { story_uid: { _eq: $uid } }) {
           description
           title
           story_uid
+          status {
+            code
+          }
           author {
             name
             bio
-            profile_img{
+            profile_img {
               entity_field
               url
               thumbnail_url
@@ -136,7 +173,8 @@ export function findStoryByUidQuery(vars, contextHeaders) {
           chapters {
             title
             intro
-            cover_img{
+            chapter_uid
+            cover_img {
               thumbnail_url
               url
             }
@@ -148,5 +186,3 @@ export function findStoryByUidQuery(vars, contextHeaders) {
     context: contextHeaders,
   };
 }
-
-

@@ -1,5 +1,4 @@
 import { secureStorage } from "boot/app";
-
 const currentRole = secureStorage.getItem("current_role");
 const isAuthor = currentRole !== undefined && currentRole !== null && currentRole === 'author';
 
@@ -20,6 +19,11 @@ const authorRouteFunction = () => {
           meta: { requiresAuth: true },
           path: "story/:story_uid?",
           component: () => import("pages/DashboardStory.vue"),
+        },
+        {
+          meta: { requiresAuth: true },
+          path: "chapter/:chapter_uid?",
+          component: () => import("pages/DashboardChapter.vue"),
         },
         {
           meta: { requiresAuth: true },

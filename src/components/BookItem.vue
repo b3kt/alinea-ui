@@ -59,14 +59,14 @@
           :label="$t('delete')"
           @click="onDeleteEvent()"
         />
-        <div class="q-btn q-btn--dense q-btn--outline q-btn--rectangle q-mr-sm">
+        <div class="q-btn q-btn--dense q-btn__content q-btn--outline q-btn--rectangle q-mr-sm">
           <q-checkbox
             color="positive"
             dense
             class="q-px-sm"
-            v-model="published"
-            :label="$t(published ? 'published' : 'private')"
-            @click="published ? onUnpublishEvent() : onPublishEvent()"
+            v-model="getIsPublished"
+            :label="$t(getIsPublished ? 'published' : 'private')"
+            @click="getIsPublished ? onUnpublishEvent() : onPublishEvent()"
           />
         </div>
       </q-card-section>
@@ -147,13 +147,12 @@ export default {
   },
   data() {
     return {
-      published: true,
+      published: false,
     };
   },
   methods: {
     onClickEvent() {
-      this.$router.push({ to: this.to });
-      // this.$router.go();
+      this.$router.push(this.to);
     },
     onEditEvent() {
       this.onEdit();
@@ -170,6 +169,9 @@ export default {
     onAddChapterEvent() {
       this.onAddChapter();
     },
+  },
+  mounted() {
+    this.published = this.getIsPublished;
   },
   computed: {
     getTitle() {
@@ -190,6 +192,11 @@ export default {
       return this.isNotEmpty(this.data.cover_img)
         ? this.data.cover_img[0].thumbnail_url
         : this.config.defaultImageURL;
+    },
+    getIsPublished() {
+      return !this.isNil(this.data.status)
+        ? this.data.status.code === 'STORY_STATUS_RELEASED'
+        : false;
     },
     getTo() {
       return this.to;

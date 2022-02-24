@@ -1,44 +1,30 @@
 import { shallowRef, ref } from "vue";
 import FormText from "components/FormText";
 import FormFile from "components/FormFile";
-import FormSelect from "components/FormSelect";
-import FormEditor from "components/FormEditor";
-import { SchemaForm, useSchemaForm } from "formvuelate";
+
+const formText = shallowRef(FormText);
+const formFile = shallowRef(FormFile);
 
 const chapterSchema = {
   title: {
-    component: FormText,
+    component: formText,
     label: "Title",
     name: "title",
     required: true,
-    config: {
-      type: "text",
-    },
+    type: "text",
   },
   intro: {
-    component: FormText,
+    component: formText,
     label: "Intro",
     name: "intro",
-    config: {
-      type: "textarea",
-    },
+    type: "textarea",
   },
-  // content: {
-  //     component: FormEditor,
-  //     label: "Intro",
-  //     name: "intro",
-  //     config: {
-  //         type: "editor",
-  //     },
-  // },
-  // cover: {
-  //     component: FormFile,
-  //     label: "Cover",
-  //     name: "cover",
-  //     config: {
-  //         type: "file",
-  //     },
-  // },
+  cover: {
+      component: formFile,
+      label: "Cover",
+      name: "cover",
+      type: "file",
+  },
 };
 
 export default chapterSchema;

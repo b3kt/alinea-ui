@@ -1,11 +1,11 @@
 <template>
   <q-page padding>
     <section id="story" class="q-mx-auto x-default-maxwidth">
-      <SectionPanel :title="$t('story')" moreUrl="stories">
+      <SectionPanel moreUrl="stories">
         <BookItem :data="getStory" mode="detail" :readonly="true" />
       </SectionPanel>
-
-      <ChapterList :data="getChapters" />
+      <q-separator class="q-mb-lg"/>
+      <ChapterList :data="getChapters" :readonly="true" />
     </section>
   </q-page>
 </template>

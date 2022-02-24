@@ -7,7 +7,6 @@ export function updateProfileMutation(vars, contextHeaders) {
         $uid: uuid!
         $name: String!
         $bio: String!
-        $email: String!
         $phone: String!
         $website: String!
       ) {
@@ -15,7 +14,6 @@ export function updateProfileMutation(vars, contextHeaders) {
           _set: {
             name: $name
             bio: $bio
-            email: $email
             phone: $phone
             website: $website
           }

@@ -75,9 +75,7 @@ export default {
       }
     },
     onEditAddress(item) {
-      console.log("-----------");
       console.log(item);
-      console.log("-----------");
       this.edit = true;
       this.id = item.id;
       this.populateFormModel(item);

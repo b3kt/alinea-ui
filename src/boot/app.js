@@ -7,8 +7,6 @@ import { mapGetters } from "vuex";
 import { openURL, Notify } from "quasar";
 import authorProfileSchema from "components/forms/author-profile-form";
 import { axiosUploadInstance } from "boot/axios";
-// import FormData from 'form-data';
-// import fs from 'fs';
 
 Notify.setDefaults({
   position: "bottom-right",
@@ -80,8 +78,7 @@ export default boot(async ({ app, router }) => {
       return {
         config: {
           appName: "Alinea",
-          defaultImageURL:
-            "https://via.placeholder.com/200x300/00a89c/ffffff?text=alinea",
+          defaultImageURL: "https://ik.imagekit.io/alinea/alinea/uploads/ffffff_KKslknJMY.png?updatedAt=1629549735786",
         },
         dialogDashboard: {
           title: "test",

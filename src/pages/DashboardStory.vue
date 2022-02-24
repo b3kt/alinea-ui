@@ -11,6 +11,8 @@
               :onEdit="onEditStory"
               :onDelete="onDeleteStory"
               :onAddChapter="onAddChapter"
+              :onPublish="onPublish"
+              :onUnpublish="onUnpublish"
             />
           </q-card-section>
         </q-card>
@@ -134,8 +136,10 @@ export default {
           persistent: true,
         })
         .onOk(() => {
-          // console.log('>>>> OK')
-          alert('deleted')
+          this.$store.dispatch('model/deleteStory', {
+            uid: this.getUID()
+          });
+          this.$router.go(-1);
         })
         .onCancel(() => {
           // console.log('>>>> Cancel')
@@ -143,6 +147,24 @@ export default {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         });
+    },
+    onPublish(){
+      this.$store.dispatch("model/publishStory", {
+        uid: this.getUID(),
+        status: 7 
+      }).then(() => {
+            this.$q.notify({ color: "positive", message: this.$t("succesfully_publish") });
+            this.initStory();
+          });
+    },
+    onUnpublish(){
+      this.$store.dispatch("model/publishStory", {
+        uid: this.getUID(),
+        status: 6
+      }).then(() => {
+            this.$q.notify({ color: "positive", message: this.$t("succesfully_unpublish") });
+            this.initStory();
+          });
     },
     onSaveChapter() {
       if (
@@ -152,13 +174,14 @@ export default {
         const vars = {
           title: this.getDialogModel.title,
           desc: this.getDialogModel.intro,
-          uid: this.sanitize(this.$route.params.story_uid),
+          uid: this.getUID(),
         };
         const resp = this.$store.dispatch("model/createChapter", vars);
         if (resp !== undefined && resp !== null) {
           resp.then(() => {
             this.$q.notify({ color: "positive", message: this.$t("succesfully_saved") });
             this.$store.commit("ui/hideDashboardDialog");
+            this.initStory();
           });
         }
       }

@@ -5,6 +5,9 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  mounted() {
+    // alert('app rendered')
+  }
 })
 </script>
